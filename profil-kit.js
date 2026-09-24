@@ -141,5 +141,239 @@
         return { data, w, h, ext: 'jpg' };
     }
 
-    return { flowUrlHint, authHelp, getv, sanitizeForPath, resolveKegiatanFolder, bytesToBase64, BULAN, parseTgl, fmtTanggal, hariInklusif, fmtAngka, fmtRupiah, sanitizeControlChars, textWidthEmu, wrapLineCount, prepareImageFile };
+/**
+ * Menghitung jumlah minggu kalender (kelipatan 7 hari inklusif).
+ */
+function calcScheduleWeeks(tglMulai, tglSelesai) {
+    const days = hariInklusif(tglMulai, tglSelesai);
+    if (!days || days <= 0) return { totalWeeks: 0, days: 0 };
+    const totalWeeks = Math.ceil(days / 7);
+    return { totalWeeks, days };
+}
+
+/**
+ * Menghitung minggu ke-berapa suatu tanggal cut-off berada.
+ */
+function calcCutoffWeek(tglMulai, tglStatus, totalWeeks) {
+    const daysElapsed = hariInklusif(tglMulai, tglStatus);
+    if (!daysElapsed) return 1;
+    const week = Math.ceil(daysElapsed / 7);
+    if (!totalWeeks || totalWeeks <= 0) return Math.max(1, week);
+    return Math.min(Math.max(week, 1), totalWeeks);
+}
+
+/**
+ * Parser deret angka persentase dari copy-paste teks Excel (tab, baris baru, koma).
+ */
+function parseNumberSeries(rawText) {
+    if (!rawText) return [];
+    if (Array.isArray(rawText)) return rawText.map(n => Number(n)).filter(n => !isNaN(n));
+    const tokens = String(rawText)
+        .replace(/%/g, '')
+        .replace(/\r\n/g, '\n')
+        .split(/[\t\n;, ]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+    const result = [];
+    for (const token of tokens) {
+        const clean = token.includes(',') && !token.includes('.') ? token.replace(',', '.') : token;
+        const num = parseFloat(clean);
+        if (!isNaN(num)) result.push(num);
+    }
+    return result;
+}
+
+/**
+ * Konversi URL sharing SharePoint/OneDrive menjadi URL Slideshow Embed untuk iframe.
+ */
+function toEmbedPptxUrl(url) {
+    if (!url) return '';
+    try {
+        const u = new URL(url.trim());
+        if (u.hostname.includes('sharepoint.com') || u.hostname.includes('1drv.ms')) {
+            u.searchParams.set('action', 'embedview');
+            u.searchParams.delete('e');
+            return u.toString();
+        }
+    } catch (e) {
+        if (url.includes('?')) return url + '&action=embedview';
+        return url + '?action=embedview';
+    }
+    return url;
+}
+
+/**
+ * Menggambar Kurva S terintegrasi (Grafik + Matriks Tabel Sumbu X) ke Canvas HTML5.
+ */
+function renderKurvaSCanvas(canvas, opts) {
+    const W = opts.width || 1920, H = opts.height || 1080;
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    const rencana = opts.rencana || [];
+    const realisasi = opts.realisasi || [];
+    const totalWeeks = Math.max(rencana.length, 1);
+    const cutoffWeek = opts.cutoffWeek || realisasi.length || 1;
+    const lastIdx = Math.min(cutoffWeek - 1, realisasi.length - 1);
+
+    const padL = 60, padR = 60, lblW = 280;
+    const chartT = 90, chartB = 680, chartH = chartB - chartT;
+    const tblT = 720, rowH = 75;
+    const dataW = W - padL - padR - lblW;
+    const colW = dataW / totalWeeks;
+
+    const getX = i => padL + lblW + (i + 0.5) * colW;
+    const getY = val => chartT + chartH - (Math.max(0, Math.min(val, 100)) / 100.0) * chartH;
+
+    // Background Putih
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, H);
+
+    // 1. Grid Garis Horizontal (0%, 25%, 50%, 75%, 100%)
+    ctx.font = '500 22px "Plus Jakarta Sans", Arial, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#64748b';
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1.5;
+
+    for (let pct = 0; pct <= 100; pct += 25) {
+        const y = getY(pct);
+        ctx.beginPath();
+        ctx.moveTo(padL + lblW, y);
+        ctx.lineTo(W - padR, y);
+        ctx.stroke();
+        ctx.fillText(pct + '%', padL + lblW - 18, y);
+    }
+
+    // Grid Vertikal halus
+    ctx.strokeStyle = '#f8fafc';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < totalWeeks; i++) {
+        const x = getX(i);
+        ctx.beginPath(); ctx.moveTo(x, chartT); ctx.lineTo(x, chartB); ctx.stroke();
+    }
+
+    // 2. Garis Rencana Kumulatif (Navy #152e4d)
+    if (rencana.length > 0) {
+        ctx.strokeStyle = '#152e4d';
+        ctx.lineWidth = 4.5;
+        ctx.beginPath();
+        rencana.forEach((v, i) => {
+            const x = getX(i), y = getY(v);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+    }
+
+    // 3. Garis Realisasi (Merah #ef4444)
+    if (realisasi.length > 0) {
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 5.5;
+        ctx.beginPath();
+        for (let i = 0; i <= lastIdx; i++) {
+            const x = getX(i), y = getY(realisasi[i]);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = '#ef4444';
+        for (let i = 0; i <= lastIdx; i++) {
+            const x = getX(i), y = getY(realisasi[i]);
+            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+
+    // Highlight Titik Terakhir Realisasi
+    if (lastIdx >= 0 && realisasi[lastIdx] !== undefined) {
+        const px = getX(lastIdx), py = getY(realisasi[lastIdx]);
+        ctx.beginPath(); ctx.arc(px, py, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#ef4444'; ctx.fill();
+        ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke();
+    }
+
+    // 4. Tabel Matriks Mingguan di Sisi Bawah
+    const rows = [
+        { label: "Minggu ke-", hdrBg: "#0c1c30", cellBg: "#f1f5f9", hdrFg: "#f59e0b", cellFg: "#0f172a" },
+        { label: "Rencana Kum. (%)", hdrBg: "#152e4d", cellBg: "#ffffff", hdrFg: "#ffffff", cellFg: "#334155" },
+        { label: "Realisasi Kum. (%)", hdrBg: "#152e4d", cellBg: "#f8fafc", hdrFg: "#ffffff", cellFg: "#0f172a" },
+        { label: "Deviasi (%)", hdrBg: "#152e4d", cellBg: "#ffffff", hdrFg: "#ffffff", cellFg: "#334155" }
+    ];
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '600 18px "JetBrains Mono", monospace';
+
+    rows.forEach((r, rIdx) => {
+        const ry = tblT + rIdx * rowH;
+        // Header Kolom Label Kiri
+        ctx.fillStyle = r.hdrBg;
+        ctx.fillRect(padL, ry, lblW, rowH);
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+        ctx.strokeRect(padL, ry, lblW, rowH);
+
+        ctx.fillStyle = r.hdrFg;
+        ctx.textAlign = 'left';
+        ctx.font = '700 20px "Plus Jakarta Sans", Arial, sans-serif';
+        ctx.fillText(r.label, padL + 18, ry + rowH / 2);
+
+        // Sel Nilai Tiap Minggu
+        ctx.textAlign = 'center';
+        ctx.font = '600 17px "JetBrains Mono", monospace';
+
+        for (let cIdx = 0; cIdx < totalWeeks; cIdx++) {
+            const cx = padL + lblW + cIdx * colW;
+            let cBg = r.cellBg, cFg = r.cellFg, valText = "-";
+
+            if (rIdx === 0) {
+                valText = String(cIdx + 1);
+            } else if (rIdx === 1) {
+                valText = rencana[cIdx] !== undefined ? Number(rencana[cIdx]).toFixed(1) : "-";
+            } else if (rIdx === 2) {
+                if (cIdx <= lastIdx && realisasi[cIdx] !== undefined) valText = Number(realisasi[cIdx]).toFixed(1);
+            } else if (rIdx === 3) {
+                if (cIdx <= lastIdx && realisasi[cIdx] !== undefined && rencana[cIdx] !== undefined) {
+                    const dev = realisasi[cIdx] - rencana[cIdx];
+                    valText = (dev > 0 ? "+" : "") + dev.toFixed(1);
+                    if (dev < 0) { cBg = "#fef2f2"; cFg = "#ef4444"; }
+                    else if (dev > 0) { cBg = "#ecfdf5"; cFg = "#15803d"; }
+                }
+            }
+
+            ctx.fillStyle = cBg;
+            ctx.fillRect(cx, ry, colW, rowH);
+            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+            ctx.strokeRect(cx, ry, colW, rowH);
+
+            ctx.fillStyle = cFg;
+            ctx.fillText(valText, cx + colW / 2, ry + rowH / 2);
+        }
+    });
+
+    // 5. Header Atas & Legenda
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 26px "Plus Jakarta Sans", Arial, sans-serif';
+    ctx.fillStyle = '#152e4d';
+    ctx.fillText('KURVA S PROGRES FISIK KEGIATAN', padL, 45);
+
+    const legX = W - padR - 380;
+    ctx.strokeStyle = '#152e4d'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(legX, 45); ctx.lineTo(legX + 35, 45); ctx.stroke();
+    ctx.font = '600 19px "Plus Jakarta Sans", Arial, sans-serif';
+    ctx.fillStyle = '#1e293b';
+    ctx.fillText('Rencana Kumulatif', legX + 45, 45);
+
+    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(legX + 230, 45); ctx.lineTo(legX + 265, 45); ctx.stroke();
+    ctx.fillText('Realisasi', legX + 275, 45);
+}
+    
+
+    return { 
+    flowUrlHint, authHelp, getv, sanitizeForPath, resolveKegiatanFolder, bytesToBase64, 
+    BULAN, parseTgl, fmtTanggal, hariInklusif, fmtAngka, fmtRupiah, sanitizeControlChars, 
+    textWidthEmu, wrapLineCount, prepareImageFile,
+    calcScheduleWeeks, calcCutoffWeek, parseNumberSeries, toEmbedPptxUrl, renderKurvaSCanvas
+};
 });
