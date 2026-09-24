@@ -1,0 +1,2 @@
+PizZip 3.2.0 - lisensi MIT atau GPL-3.0 (dwi-lisensi). Sumber: https://github.com/open-xml-templating/pizzip
+Berkas ini disertakan agar profil.html tidak bergantung pada CDN.

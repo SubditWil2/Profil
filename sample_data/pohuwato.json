@@ -1,0 +1,385 @@
+{
+  "_catatan": "Data uji Fase 0/1 dari deck Profil_Pembangunan_Kantor_Bupati_Pohuwato.pptx. Keterangan foto hanya untuk menguji tata letak (foto uji belum tentu sesuai keterangannya). Baris bertanda [PENGECOH] harus tersaring.",
+  "kegiatan": {
+    "provinsi": "05. Gorontalo",
+    "namaKegiatan": "02. Pembangunan Kantor Bupati Pohuwato"
+  },
+  "profilDasar": {
+    "judul": "Pembangunan Kantor Bupati Pohuwato",
+    "kodeKontrak": "SYC",
+    "tahun": 2026,
+    "lokasiSingkat": "Kab. Pohuwato, Provinsi Gorontalo",
+    "lokasiPekerjaan": "Kabupaten Pohuwato, Provinsi Gorontalo",
+    "tglMulai": "2026.05.29",
+    "tglSelesai": "2026.12.31",
+    "luasPersil": 30000,
+    "luasBangunan": 3444,
+    "pihak": [
+      {
+        "peran": "Konsultan Supervisi",
+        "nama": "PT. Manggala Karya Bangun Sarana",
+        "nilai": 1079968728
+      },
+      {
+        "peran": "Kontraktor Pelaksana",
+        "nama": "PT. Cipta Adhi Guna",
+        "nilai": 37268364000
+      }
+    ],
+    "lingkup": [
+      "Kantor Bupati Pohuwato (Luas: 3.147 m2 2 Lantai)",
+      "Powerhouse (Luas: 297 m2 1 Lantai)"
+    ],
+    "latarBelakang": [
+      "Gedung Kantor Bupati Pohuwato merupakan Pusat Pemerintahan dan Fasilitas Pelayanan Publik yang sangat dibutuhkan oleh masyarakat Kabupaten Pohuwato, Provinsi Gorontalo, dan merupakan salah satu bangunan gedung negara yang mengalami kerusakan total akibat insiden kerusuhan dan pembakaran pada bulan September tahun 2023 silam.",
+      "Sebagai pusat penyelenggaraan pemerintahan daerah yang vital bagi keberlangsungan pelayanan publik di Kabupaten Pohuwato, Pembangunan kembali gedung kantor bupati merupakan sebuah urgensi guna memulihkan fungsi penyelenggaraan pemerintahan, meningkatkan kualitas pelayanan publik, serta mengoptimalkan kembali tata kelola administrasi daerah secara efektif dan kondusif. Untuk itu Pemerintah Kabupaten Pohuwato telah melakukan penyusunan Dokumen Perencanaan Pembangunan Kantor Bupati Pohuwato pada Tahun 2024."
+    ],
+    "maksudTujuan": [
+      "Maksud Pelaksanaan Pembangunan Kantor Bupati Pohuwato adalah melaksanakan Pembangunan Kembali Gedung Kantor Bupati Pohuwato yang Terdampak Bencana Non-Alam (Kerusuhan) sehingga gedung tersebut dapat difungsikan kembali sebagai pusat fasilitas pelayanan pemerintahan dan administrasi publik bagi masyarakat."
+    ],
+    "aset": {
+      "design3d": "photos/design3d.jpg",
+      "pra": "photos/pra.jpg",
+      "pasca": "photos/pasca.jpg"
+    },
+    "capPra": "Kondisi Bangunan Pra-Kerusuhan",
+    "capPasca": "Kondisi Bangunan Pasca-Kerusuhan"
+  },
+  "progres": {
+    "tanggalStatus": "2026.08.16",
+    "fisik": {
+      "rencana": 11.63,
+      "realisasi": 7.68
+    },
+    "keuangan": {
+      "rencana": 20.0,
+      "realisasi": 20.0
+    },
+    "masalah": [
+      "Pengadaan material bekisting terambat sehingga menghambat pelaksanaan pengecoran;",
+      "Pekerjaan pemancangan yang telah dilaksanakan menunjukkan penetrasi rata-rata mencapai kedalaman +- 7 m dari permukaan tanah. Hal ini menjadi kendala karena panjang minipile yang disiapkan adalah 6 m sehingga mayoritas tiang pancnag tidak mencapai final set dan tidak dapat dilakukan kalendering."
+    ],
+    "tindakLanjut": [
+      "Penyedia Jasa perlu mempercepat pengadaan material agar tidak ada area kerja yang idle.",
+      "Konsultan Perencana akan menyampaikan Rekomendasi teknis untuk dapat diimplementasikan di lapangan. Akan dilakukan pembahasan dengan Narasumber Ahli Geoteknik.",
+      "PJ dan Konsultan Supervisi perlu segera menyusun schedule percepatan."
+    ],
+    "kurvaS": "photos/kurvas.jpg"
+  },
+  "foto": [
+    {
+      "file": "photos/foto_21.jpg",
+      "kelompok": "Gedung A1",
+      "keterangan": "Tampak Depan",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_22.jpg",
+      "kelompok": "Gedung A1",
+      "keterangan": "Tampak Belakang",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_23.jpg",
+      "kelompok": "Gedung A2",
+      "keterangan": "Tampak Depan",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_24.jpg",
+      "kelompok": "Gedung A2",
+      "keterangan": "Tampak Belakang",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_26.jpg",
+      "kelompok": "Gedung A3",
+      "keterangan": "Tampak Depan",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_25.jpg",
+      "kelompok": "Gedung A3",
+      "keterangan": "Tampak Belakang",
+      "sorotan": true
+    },
+    {
+      "file": "photos/foto_28.jpg",
+      "kelompok": "Bangunan A1",
+      "keterangan": "Tampak Depan",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_29.jpg",
+      "kelompok": "Bangunan A1",
+      "keterangan": "Tampak Belakang",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_30.jpg",
+      "kelompok": "Bangunan A2",
+      "keterangan": "Tampak Depan",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_31.jpg",
+      "kelompok": "Bangunan A2",
+      "keterangan": "Tampak Samping",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_32.jpg",
+      "kelompok": "Bangunan A2",
+      "keterangan": "Tampak Belakang",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_33.jpg",
+      "kelompok": "Bangunan A3",
+      "keterangan": "Tampak Depan",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_34.jpg",
+      "kelompok": "Bangunan A3",
+      "keterangan": "Tampak Samping",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_35.jpg",
+      "kelompok": "Bangunan A3",
+      "keterangan": "Tampak Belakang",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_21.jpg",
+      "kelompok": "Powerhouse",
+      "keterangan": "Tampak Depan",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_22.jpg",
+      "kelompok": "Powerhouse",
+      "keterangan": "Tampak Samping",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_23.jpg",
+      "kelompok": "Powerhouse",
+      "keterangan": "Tampak Belakang",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_24.jpg",
+      "kelompok": "Powerhouse",
+      "keterangan": "Tampak Atas",
+      "sorotan": false
+    },
+    {
+      "file": "photos/foto_25.jpg",
+      "kelompok": "Powerhouse",
+      "keterangan": "Tampak Dalam",
+      "sorotan": false
+    }
+  ],
+  "kronologisRaw": [
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.04.19",
+      "Perihal": "Usulan Anggaran",
+      "Nomor Surat": "900/Peru/388",
+      "AlurDari": "Bupati Pohuwato",
+      "AlurKe": "Menteri Pekerjaan Umum dan Perumahan Rakyat RI",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.04.24",
+      "Perihal": "Disposisi Bapak Menteri PUPR Kunker Pres ke Gorontalo & Sulbar",
+      "Nomor Surat": "",
+      "AlurDari": "Menteri PUPR",
+      "AlurKe": "",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.05.08",
+      "Perihal": "Permohonan Anggaran",
+      "Nomor Surat": "800/PEM-DPU-PR/468",
+      "AlurDari": "Bupati Pohuwato",
+      "AlurKe": "Bapak Presiden RI Ir. Joko Widodo",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.05.20",
+      "Perihal": "Permohonan Audiensi",
+      "Nomor Surat": "800/12/DPU.PR/PHWT/V/2024",
+      "AlurDari": "Bupati Pohuwato",
+      "AlurKe": "Menteri Pekerjaan Umum dan Perumahan Rakyat RI",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.05.22",
+      "Perihal": "Disposisi Bapak Menteri PUPR Surat Permohonan audiensi",
+      "Nomor Surat": "494/AM/24",
+      "AlurDari": "Menteri PUPR",
+      "AlurKe": "Menteri PUPR",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2024.05.27",
+      "Perihal": "Laporan Survey Kegiatan Bina Penataan Bangunan di Provinsi Gorontalo",
+      "Nomor Surat": "818/ND/Cb/2024",
+      "AlurDari": "Direktur Bina Penataan Bangunan",
+      "AlurKe": "Direktur Jenderal Cipta Karya",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.07.18",
+      "Perihal": "Usulan Kegiatan Pembangunan Kantor Bupati Pohuwato Provinsi Gorontalo",
+      "Nomor Surat": "908/ND/Cb/2025",
+      "AlurDari": "Direktur Bina Penataan Bangunan",
+      "AlurKe": "Direktur Jenderal Cipta Karya",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.09.10",
+      "Perihal": "Kebijakan Pembangunan Bangunan Gedung Negara",
+      "Nomor Surat": "B-14/M/SDK/SA.00/09/2025",
+      "AlurDari": "Menteri Sekretaris Negara",
+      "AlurKe": "Menteri Pekerjaan Umum",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2026.05.26",
+      "Perihal": "Surat Perjanjian Supervisi Pembangunan Gedung Kantor Bupati Pohuwato",
+      "Nomor Surat": "HK0201/Bpbpk31.4.1/2026/02",
+      "AlurDari": "PPK Perencanaan BPBPK Gorontalo",
+      "AlurKe": "Direktur PT. Manggalakarya KSO CV. Mulya Persada",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2026.07.10",
+      "Perihal": "Penyampaian informasi atas Pengaduan Masyarakat oleh Dewan Perwakilan Daerah Republik Indonesia Provinsi Gorontalo",
+      "Nomor Surat": "PW0202/R/Ci/2026/161",
+      "AlurDari": "Direktur Kepatuhan Intern",
+      "AlurKe": "Plt. Direktur Jenderal Cipta Karya",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.09.16",
+      "Perihal": "Usulan Pembangunan Kantor Bupati Pohuwato",
+      "Nomor Surat": "600/PUPR-PKP/1084/IX/2025",
+      "AlurDari": "Gubernur Gorontalo",
+      "AlurKe": "Menteri Pekerjaan Umum",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.09.17",
+      "Perihal": "Penyampaian Informasi Kegiatan Pembangunan Kantor Bupati Pohuwato",
+      "Nomor Surat": "UM 01.03/Bpbpk31/404",
+      "AlurDari": "Kepala Balai Penataan Bangunan, Prasarana Kawasan Gorontalo",
+      "AlurKe": "Bupati Pohuwato",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.09.19",
+      "Perihal": "Laporan Usulan Kegiatan Pembangunan Kantor Bupati Pohuwato Provinsi Gorontalo",
+      "Nomor Surat": "1137/ND/Cb/2025",
+      "AlurDari": "Direktur Bina Penataan Bangunan",
+      "AlurKe": "Direktur Jenderal Cipta Karya",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2025.09.22",
+      "Perihal": "Pembangunan Gedung Kantor Bupati Pohuwato Provinsi Gorontalo",
+      "Nomor Surat": "CK0402-DC/768",
+      "AlurDari": "Direktorat Jenderal Cipta Karya, Kementerian Pekerjaan Umum",
+      "AlurKe": "Deputi Bidang Politik, Hukum, Keamanan, dan Hak Asasi Manusia, Kementerian Sekretariat Negara",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2026.05.29",
+      "Perihal": "Surat Perjanjian Pembangunan Gedung Kantor Bupati Pohuwato",
+      "Nomor Surat": "HK0201 / Bpbpk31.5.2/2026/01",
+      "AlurDari": "PPK PKS dan BPB Satker PCK Gorontalo",
+      "AlurKe": "Kepala Cabang PT. Cipta Adhi Guna",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2026.07.10",
+      "Perihal": "Tanggapan atas Pengaduan Masyarakat oleh Dewan Perwakilan Daerah Republik Indonesia Provinsi Gorontalo",
+      "Nomor Surat": "PW0202/T/Ci/2026/162",
+      "AlurDari": "Direktur Kepatuhan Intern",
+      "AlurKe": "Kepala Balai Penataan Bangunan, Prasarana dan Kawasan Gorontalo",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "08. Nusa Tenggara Barat",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Surat",
+      "Tanggal": "2026.01.01",
+      "Perihal": "[PENGECOH] provinsi lain, nama kegiatan sama",
+      "Nomor Surat": "X/1",
+      "AlurDari": "-",
+      "AlurKe": "-",
+      "IsKronologis": "Ya"
+    },
+    {
+      "Provinsi": "05. Gorontalo",
+      "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+      "Jenis Dokumen": "Nota Dinas",
+      "Tanggal": "2026.02.02",
+      "Perihal": "[PENGECOH] tidak ditandai kronologis",
+      "Nomor Surat": "X/2",
+      "AlurDari": "-",
+      "AlurKe": "-",
+      "IsKronologis": "Tidak"
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+ "_catatan": "Fixture bentuk respons GetMasterData (dibuat dari data uji). Kunci kolom sengaja bervariasi seperti data asli: _x0020_, huruf besar/kecil, tanggal ISO.",
+ "provinsi": [
+  {
+   "Provinsi": "01. Sulawesi Utara"
+  },
+  {
+   "Provinsi": "05. Gorontalo"
+  },
+  {
+   "Provinsi": "08. Nusa Tenggara Barat"
+  },
+  {
+   "Provinsi": "19. Kegiatan Lainnya"
+  }
+ ],
+ "kegiatan": [
+  {
+   "Provinsi": "05. Gorontalo",
+   "Nama Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal Rapat": "2026.06.01",
+   "Judul Rapat": "Rapat Kick Off Pohuwato",
+   "Notulis": "Uji"
+  }
+ ],
+ "notadinas": [
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024-04-19T00:00:00",
+   "Nomor_x0020_Surat": "900/Peru/388",
+   "Perihal": "Usulan Anggaran",
+   "AlurDari": "Bupati Pohuwato",
+   "AlurKe": "Menteri Pekerjaan Umum dan Perumahan Rakyat RI",
+   "IsKronologis": "ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.04.19 - Dok 1/2024.04.19 - Dok 1.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024.04.24",
+   "Nomor_x0020_Surat": "",
+   "Perihal": "Disposisi Bapak Menteri PUPR Kunker Pres ke Gorontalo & Sulbar",
+   "AlurDari": "Menteri PUPR",
+   "AlurKe": "",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.04.24 - Dok 2/2024.04.24 - Dok 2.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024.05.08",
+   "Nomor_x0020_Surat": "800/PEM-DPU-PR/468",
+   "Perihal": "Permohonan Anggaran",
+   "AlurDari": "Bupati Pohuwato",
+   "AlurKe": "Bapak Presiden RI Ir. Joko Widodo",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.05.08 - Dok 3/2024.05.08 - Dok 3.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024.05.20",
+   "Nomor_x0020_Surat": "800/12/DPU.PR/PHWT/V/2024",
+   "Perihal": "Permohonan Audiensi",
+   "AlurDari": "Bupati Pohuwato",
+   "AlurKe": "Menteri Pekerjaan Umum dan Perumahan Rakyat RI",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.05.20 - Dok 4/2024.05.20 - Dok 4.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024.05.22",
+   "Nomor_x0020_Surat": "494/AM/24",
+   "Perihal": "Disposisi Bapak Menteri PUPR Surat Permohonan audiensi",
+   "AlurDari": "Menteri PUPR",
+   "AlurKe": "Menteri PUPR",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.05.22 - Dok 5/2024.05.22 - Dok 5.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2024.05.27",
+   "Nomor_x0020_Surat": "818/ND/Cb/2024",
+   "Perihal": "Laporan Survey Kegiatan Bina Penataan Bangunan di Provinsi Gorontalo",
+   "AlurDari": "Direktur Bina Penataan Bangunan",
+   "AlurKe": "Direktur Jenderal Cipta Karya",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2024.05.27 - Dok 6/2024.05.27 - Dok 6.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.07.18",
+   "Nomor_x0020_Surat": "908/ND/Cb/2025",
+   "Perihal": "Usulan Kegiatan Pembangunan Kantor Bupati Pohuwato Provinsi Gorontalo",
+   "AlurDari": "Direktur Bina Penataan Bangunan",
+   "AlurKe": "Direktur Jenderal Cipta Karya",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.07.18 - Dok 7/2025.07.18 - Dok 7.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.09.10",
+   "Nomor_x0020_Surat": "B-14/M/SDK/SA.00/09/2025",
+   "Perihal": "Kebijakan Pembangunan Bangunan Gedung Negara",
+   "AlurDari": "Menteri Sekretaris Negara",
+   "AlurKe": "Menteri Pekerjaan Umum",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.09.10 - Dok 8/2025.09.10 - Dok 8.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.05.26",
+   "Nomor_x0020_Surat": "HK0201/Bpbpk31.4.1/2026/02",
+   "Perihal": "Surat Perjanjian Supervisi Pembangunan Gedung Kantor Bupati Pohuwato",
+   "AlurDari": "PPK Perencanaan BPBPK Gorontalo",
+   "AlurKe": "Direktur PT. Manggalakarya KSO CV. Mulya Persada",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.05.26 - Dok 9/2026.05.26 - Dok 9.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.07.10",
+   "Nomor_x0020_Surat": "PW0202/R/Ci/2026/161",
+   "Perihal": "Penyampaian informasi atas Pengaduan Masyarakat oleh Dewan Perwakilan Daerah Republik Indonesia Provinsi Gorontalo",
+   "AlurDari": "Direktur Kepatuhan Intern",
+   "AlurKe": "Plt. Direktur Jenderal Cipta Karya",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.07.10 - Dok 10/2026.07.10 - Dok 10.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.09.16",
+   "Nomor_x0020_Surat": "600/PUPR-PKP/1084/IX/2025",
+   "Perihal": "Usulan Pembangunan Kantor Bupati Pohuwato",
+   "AlurDari": "Gubernur Gorontalo",
+   "AlurKe": "Menteri Pekerjaan Umum",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.09.16 - Dok 11/2025.09.16 - Dok 11.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.09.17",
+   "Nomor_x0020_Surat": "UM 01.03/Bpbpk31/404",
+   "Perihal": "Penyampaian Informasi Kegiatan Pembangunan Kantor Bupati Pohuwato",
+   "AlurDari": "Kepala Balai Penataan Bangunan, Prasarana Kawasan Gorontalo",
+   "AlurKe": "Bupati Pohuwato",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.09.17 - Dok 12/2025.09.17 - Dok 12.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.09.19",
+   "Nomor_x0020_Surat": "1137/ND/Cb/2025",
+   "Perihal": "Laporan Usulan Kegiatan Pembangunan Kantor Bupati Pohuwato Provinsi Gorontalo",
+   "AlurDari": "Direktur Bina Penataan Bangunan",
+   "AlurKe": "Direktur Jenderal Cipta Karya",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.09.19 - Dok 13/2025.09.19 - Dok 13.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2025.09.22",
+   "Nomor_x0020_Surat": "CK0402-DC/768",
+   "Perihal": "Pembangunan Gedung Kantor Bupati Pohuwato Provinsi Gorontalo",
+   "AlurDari": "Direktorat Jenderal Cipta Karya, Kementerian Pekerjaan Umum",
+   "AlurKe": "Deputi Bidang Politik, Hukum, Keamanan, dan Hak Asasi Manusia, Kementerian Sekretariat Negara",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2025.09.22 - Dok 14/2025.09.22 - Dok 14.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.05.29",
+   "Nomor_x0020_Surat": "HK0201 / Bpbpk31.5.2/2026/01",
+   "Perihal": "Surat Perjanjian Pembangunan Gedung Kantor Bupati Pohuwato",
+   "AlurDari": "PPK PKS dan BPB Satker PCK Gorontalo",
+   "AlurKe": "Kepala Cabang PT. Cipta Adhi Guna",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.05.29 - Dok 15/2026.05.29 - Dok 15.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.07.10",
+   "Nomor_x0020_Surat": "PW0202/T/Ci/2026/162",
+   "Perihal": "Tanggapan atas Pengaduan Masyarakat oleh Dewan Perwakilan Daerah Republik Indonesia Provinsi Gorontalo",
+   "AlurDari": "Direktur Kepatuhan Intern",
+   "AlurKe": "Kepala Balai Penataan Bangunan, Prasarana dan Kawasan Gorontalo",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.07.10 - Dok 16/2026.07.10 - Dok 16.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Surat",
+   "Provinsi": "08. Nusa Tenggara Barat",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.01.01",
+   "Nomor_x0020_Surat": "X/1",
+   "Perihal": "[PENGECOH] provinsi lain, nama kegiatan sama",
+   "AlurDari": "-",
+   "AlurKe": "-",
+   "IsKronologis": "Ya",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/08. Nusa Tenggara Barat/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.01.01 - Dok 17/2026.01.01 - Dok 17.pdf"
+  },
+  {
+   "Jenis_x0020_Dokumen": "Nota Dinas",
+   "Provinsi": "05. Gorontalo",
+   "Nama_x0020_Kegiatan": "02. Pembangunan Kantor Bupati Pohuwato",
+   "Tanggal": "2026.02.02",
+   "Nomor_x0020_Surat": "X/2",
+   "Perihal": "[PENGECOH] tidak ditandai kronologis",
+   "AlurDari": "-",
+   "AlurKe": "-",
+   "IsKronologis": "Tidak",
+   "Path ND - Surat": "/SUBDIT WILAYAH 2 BPB/05. Gorontalo/02. Pembangunan Kantor Bupati Pohuwato/F. Surat, ND, Notulensi/a. Surat/2026.02.02 - Dok 18/2026.02.02 - Dok 18.pdf"
+  }
+ ],
+ "masterKegiatanGabungan": "[{\"Provinsi\": \"05. Gorontalo\", \"Nama Kegiatan\": \"02. Pembangunan Kantor Bupati Pohuwato\"}, {\"Provinsi\": \"05. Gorontalo\", \"Nama Kegiatan\": \"01. Notulensi Gorontalo\"}][{\"Provinsi\": \"08. Nusa Tenggara Barat\", \"Nama Kegiatan\": \"03. Pembangunan Gedung DPRD Provinsi NTB\"}, {\"Provinsi\": \"19. Kegiatan Lainnya\", \"Nama Kegiatan\": \"01. Notulensi\"}]",
+ "geminiKey": [
+  {
+   "NamaSetting": "GeminiAPI1",
+   "Nilai": "KEY-CONTOH-1"
+  },
+  {
+   "NamaSetting": "Lainnya",
+   "Nilai": "x"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "profil-kegiatan-dev",
+  "private": true,
+  "description": "Fitur Profil Kegiatan (PPTX) - alat uji Node. Browser memakai libs/pizzip.min.js.",
+  "scripts": {
+    "test": "node tests/run_tests.js && node tests/test_live_save.js && node tests/test_master_ai.js && node tests/smoke_page.js && node tests/smoke_live.js && node tests/smoke_month2.js"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "^0.8.10",
+    "image-size": "*",
+    "jsdom": "*",
+    "pizzip": "^3.1.4"
+  }
+}

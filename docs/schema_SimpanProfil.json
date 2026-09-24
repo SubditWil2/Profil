@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "provinsi": {
+      "type": "string"
+    },
+    "namaKegiatan": {
+      "type": "string"
+    },
+    "namaKegiatanFolder": {
+      "type": "string"
+    },
+    "targetFolderPath": {
+      "type": "string"
+    },
+    "fileName": {
+      "type": "string"
+    },
+    "pathPptx": {
+      "type": "string"
+    },
+    "pptxBase64": {
+      "type": "string"
+    },
+    "tanggalStatus": {
+      "type": "string"
+    },
+    "judul": {
+      "type": "string"
+    },
+    "fisikRencana": {},
+    "fisikRealisasi": {},
+    "keuRencana": {},
+    "keuRealisasi": {},
+    "masalah": {
+      "type": "string"
+    },
+    "tindakLanjut": {
+      "type": "string"
+    },
+    "jumlahFoto": {
+      "type": "integer"
+    },
+    "jumlahSlide": {
+      "type": "integer"
+    },
+    "snapshotJson": {
+      "type": "string"
+    },
+    "pic": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "payloadMB": {
+      "type": "number"
+    },
+    "simpanMaster": {
+      "type": "boolean"
+    },
+    "master": {
+      "type": "object",
+      "properties": {
+        "judul": {},
+        "kodeKontrak": {},
+        "tahun": {},
+        "lokasiSingkat": {},
+        "lokasiPekerjaan": {},
+        "tglMulai": {},
+        "tglSelesai": {},
+        "luasPersil": {},
+        "luasBangunan": {},
+        "pihakJson": {},
+        "lingkup": {},
+        "latarBelakang": {},
+        "maksudTujuan": {},
+        "capPra": {},
+        "capPasca": {}
+      }
+    },
+    "aset": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nama": {
+            "type": "string"
+          },
+          "ext": {
+            "type": "string"
+          },
+          "base64": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "provinsi",
+    "namaKegiatan",
+    "targetFolderPath",
+    "fileName",
+    "pptxBase64",
+    "tanggalStatus",
+    "pic"
+  ]
+}

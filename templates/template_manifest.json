@@ -1,0 +1,212 @@
+{
+  "template": "Template_Profil_Kegiatan.pptx",
+  "version": 1,
+  "slideOrder": [
+    "cover",
+    "kronologis",
+    "latar",
+    "profil",
+    "kurvas",
+    "dokumentasi",
+    "terimakasih"
+  ],
+  "required": [
+    "judul_kegiatan",
+    "label_program",
+    "tanggal_cover",
+    "nama_pekerjaan",
+    "tanggal_status",
+    "fisik_rencana",
+    "fisik_realisasi",
+    "fisik_deviasi",
+    "keu_rencana",
+    "keu_realisasi",
+    "keu_deviasi"
+  ],
+  "prototypes": {
+    "cover": {
+      "tags": [
+        "judul_kegiatan",
+        "tanggal_cover"
+      ]
+    },
+    "kronologis": {
+      "tags": [
+        "judul_kegiatan",
+        "label_program",
+        "kron.no",
+        "kron.tanggal",
+        "kron.uraian",
+        "kron.nomor",
+        "kron.dari",
+        "kron.ke"
+      ],
+      "tables": {
+        "tbl:kron": {
+          "list": "kron",
+          "zebra": [
+            "FFFFFF",
+            "E8F1F5"
+          ]
+        }
+      }
+    },
+    "latar": {
+      "tags": [
+        "judul_kegiatan",
+        "label_program",
+        "@latar_belakang",
+        "@maksud_tujuan",
+        "cap_pra",
+        "cap_pasca"
+      ],
+      "slots": [
+        "img:pra",
+        "img:pasca"
+      ],
+      "fits": [
+        "fit:latar",
+        "fit:maksud"
+      ]
+    },
+    "profil": {
+      "tags": [
+        "judul_kegiatan",
+        "lokasi",
+        "label_program",
+        "kode_kontrak",
+        "nama_pekerjaan",
+        "lokasi_pekerjaan",
+        "masa_pelaksanaan",
+        "luas_persil",
+        "luas_bangunan",
+        "pihak.peran",
+        "pihak.nama",
+        "pihak.nilai",
+        "@lingkup",
+        "@masalah",
+        "@tindak_lanjut",
+        "tanggal_status",
+        "fisik_rencana",
+        "fisik_realisasi",
+        "fisik_deviasi",
+        "keu_rencana",
+        "keu_realisasi",
+        "keu_deviasi"
+      ],
+      "slots": [
+        "img:design3d"
+      ],
+      "areas": [
+        "area:foto"
+      ],
+      "protos": [
+        "proto:caption"
+      ],
+      "tables": {
+        "tbl:spek": {
+          "groups": [
+            "pihak"
+          ]
+        },
+        "tbl:masalah": {},
+        "tbl:status": {}
+      }
+    },
+    "kurvas": {
+      "tags": [
+        "judul_kegiatan",
+        "label_program"
+      ],
+      "slots": [
+        "img:kurvas"
+      ]
+    },
+    "dokumentasi": {
+      "tags": [
+        "judul_kegiatan",
+        "label_program"
+      ],
+      "areas": [
+        "area:foto"
+      ],
+      "protos": [
+        "proto:caption"
+      ]
+    },
+    "terimakasih": {
+      "tags": []
+    }
+  },
+  "rules": {
+    "emptyRowRemoval": "Baris tabel / bentuk teks yang semua tag-nya kosong dibuang; baris tanpa tag tidak disentuh.",
+    "listParagraph": "{@nama} pada satu paragraf = paragraf digandakan per item (gaya, bullet, nomor otomatis ikut).",
+    "rowGroup": "Baris berurutan yang memuat tag berawalan 'nama.' membentuk satu grup; grup digandakan per item list.",
+    "slotFit": {
+      "default": "cover",
+      "img:kurvas": "contain"
+    },
+    "captionCase": {
+      "profil": "upper",
+      "dokumentasi": "asis"
+    },
+    "captionPlacement": "overlay-bawah-foto, gaya diambil dari bentuk proto:caption di slide yang sama",
+    "maxPhotosPerSlide": {
+      "profil": 6,
+      "dokumentasi": 6
+    },
+    "gridMode": {
+      "profil": "kolom2",
+      "dokumentasi": "pola"
+    },
+    "cellAspect": 1.64,
+    "stackTables": {
+      "top": "tbl:spek",
+      "bottom": "tbl:masalah",
+      "bottomEdgeEmu": 6810000,
+      "gapEmu": 40000,
+      "minScale": 0.7
+    },
+    "fitText": {
+      "latar": {
+        "boxes": [
+          "fit:latar",
+          "fit:maksud"
+        ],
+        "sizesPt": [
+          14,
+          13,
+          12,
+          11,
+          10,
+          9
+        ],
+        "gapEmu": 150000,
+        "bottomEdgeEmu": 6500000
+      }
+    }
+  },
+  "layoutHints": {
+    "kronologis": {
+      "colWidthsEmu": [
+        360000,
+        1100000,
+        3880000,
+        1900000,
+        2080000,
+        2272000
+      ],
+      "fontPt": 9,
+      "cellMarginEmu": [
+        72000,
+        72000,
+        22000,
+        22000
+      ],
+      "minRowEmu": 300000,
+      "headerEmu": 300000,
+      "topEmu": 850000,
+      "bottomEmu": 6450000
+    }
+  }
+}

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Profil Kegiatan (PPTX) — Subdit Wil 2 [Fase 1]</title>
+  <!-- FITUR MANDIRI: tidak memuat navbar.js / dms-shared.js. PizZip disertakan lokal (libs/) supaya tidak bergantung pada CDN. -->
+  <script src="libs/pizzip.min.js"></script>
+  <script src="profil-config.js"></script>
+  <script src="profil-kit.js"></script>
+  <script src="profil-builders.js"></script>
+  <script src="pptx-engine.js"></script>
+  <script src="profil-live.js"></script>
+  <script src="profil-save.js"></script>
+  <script src="profil-master.js"></script>
+  <script src="profil-ai.js"></script>
+  <style>
+    :root {
+      --navy: #1d355e;
+      --navy2: #11223f;
+      --gold: #f5b016;
+      --line: #e2e8f0;
+      --mut: #64748b;
+      --ok: #27ae60;
+      --bad: #e74c3c
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    body {
+      padding-top: env(safe-area-inset-top, 0px);
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f4f6f9;
+      color: #334155;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px))
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: #fff;
+      padding: 14px 16px;
+      border-bottom: 4px solid var(--gold)
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 17px
+    }
+
+    header p {
+      margin: 3px 0 0;
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 600
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(29, 53, 94, .05)
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: var(--navy)
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 8px 0 3px
+    }
+
+    input[type=text],
+    input[type=date],
+    input[type=number],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px 9px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 7px;
+      font: inherit;
+      font-size: 13px
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px
+    }
+
+    button,
+    .btn {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      background: var(--navy);
+      color: #fff
+    }
+
+    button.sec {
+      background: #f1f5f9;
+      color: var(--navy);
+      border: 1.5px solid #cbd5e1
+    }
+
+    button.gold {
+      background: var(--gold);
+      color: var(--navy2)
+    }
+
+    button.ok {
+      background: var(--ok)
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0
+    }
+
+    .chip {
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      cursor: pointer;
+      user-select: none
+    }
+
+    .chip.on {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(245, 176, 22, .35)
+    }
+
+    .paste {
+      border: 2px dashed #94a3b8;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      background: #f8fafc;
+      font-size: 12.5px;
+      color: var(--mut);
+      margin: 8px 0
+    }
+
+    .paste.hot {
+      border-color: var(--gold);
+      background: #fffbeb
+    }
+
+    .paste b {
+      color: var(--navy)
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    .slot {
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 6px;
+      font-size: 11.5px;
+      text-align: center;
+      background: #fff
+    }
+
+    .slot.on {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(245, 176, 22, .3)
+    }
+
+    .slot img {
+      width: 100%;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 5px;
+      background: #eef3f6;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    .tray {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    .ph {
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      padding: 7px;
+      background: #fff;
+      position: relative
+    }
+
+    .ph.star {
+      border-color: var(--gold);
+      background: #fffdf5
+    }
+
+    .ph img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #eef3f6;
+      display: block
+    }
+
+    .ph input {
+      margin-top: 5px;
+      padding: 6px 7px;
+      font-size: 12px
+    }
+
+    .ph .bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 5px
+    }
+
+    .ph .bar button {
+      padding: 6px 8px;
+      font-size: 12px;
+      flex: 1
+    }
+
+    .ph .dup {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--bad);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px
+    }
+
+    .ph.armed {
+      border-color: var(--bad);
+      box-shadow: 0 0 0 2px rgba(231, 76, 60, .3)
+    }
+
+    .ph .bar {
+      flex-wrap: wrap
+    }
+
+    .ph .bar button {
+      flex: 1 1 auto;
+      min-width: 34px
+    }
+
+    .slot.armed {
+      border-color: var(--bad);
+      box-shadow: 0 0 0 2px rgba(231, 76, 60, .3)
+    }
+
+    .paste.armed {
+      border-color: var(--bad);
+      background: #fef2f2
+    }
+
+    .replace-banner {
+      background: #fef2f2;
+      border: 1.5px solid var(--bad);
+      color: #991b1b;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      margin: 8px 0 0;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .replace-banner:not([hidden]) {
+      display: flex
+    }
+
+    .plan {
+      font-size: 13px;
+      line-height: 1.5;
+      background: #f0f7ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 10px
+    }
+
+    .warn {
+      margin: 6px 0 0;
+      padding: 0 0 0 18px;
+      font-size: 12px;
+      color: #92400e
+    }
+
+    .err {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 12.5px;
+      margin-top: 8px;
+      white-space: pre-wrap
+    }
+
+    .okbox {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 12.5px;
+      margin-top: 8px
+    }
+
+    .kron {
+      font-size: 11.5px;
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px
+    }
+
+    .kron td,
+    .kron th {
+      border: 1px solid var(--line);
+      padding: 3px 5px;
+      text-align: left
+    }
+
+    .kron th {
+      background: #f1f5f9
+    }
+
+    .mut {
+      color: var(--mut);
+      font-size: 12px
+    }
+
+    .aiout {
+      white-space: pre-wrap;
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12.5px;
+      margin-top: 6px
+    }
+
+    .pihak {
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr .9fr auto;
+      gap: 6px;
+      margin-top: 6px
+    }
+
+    @media(max-width:560px) {
+      .pihak {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 13px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Profil Kegiatan → PPTX</h1>
+    <p>Subdit Wil 2 BPB · Fase 1 (mandiri, belum terhubung ke DMS)</p>
+  </header>
+  <main>
+
+    <section class="card">
+      <h2>0. Kegiatan</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnLive" class="ok">Muat dari DMS</button>
+        <button id="btnSample" class="gold">Data uji (Pohuwato)</button>
+        <label class="btn sec" style="margin:0;display:inline-block">Muat draf JSON… <input type="file" id="fileJson"
+            accept=".json" hidden></label>
+        <button id="btnDraft" class="sec" hidden>Unduh draf JSON</button>
+      </div>
+      <div id="livePick" hidden>
+        <div class="row">
+          <div><label>Provinsi</label><select id="selProv"></select></div>
+          <div><label>Kegiatan</label><select id="selKeg"></select></div>
+        </div>
+        <button id="btnStart" style="margin-top:8px">Mulai profil kegiatan ini</button>
+      </div>
+      <p class="mut" id="dataInfo">Belum ada data. Muat dari DMS, atau mulai dengan data uji.</p>
+      <p class="mut" id="masterInfo" style="margin-top:0"></p>
+    </section>
+
+    <section class="card" id="cardMain" hidden>
+      <h2>1. Data laporan</h2>
+      <div id="fields">
+        <button class="sec" id="btnPrev" hidden style="margin:2px 0 6px"></button>
+        <div class="row">
+          <div><label>Judul kegiatan</label><input type="text" id="fJudul"></div>
+          <div><label>Tanggal status/data</label><input type="date" id="fTgl"></div>
+        </div>
+        <div class="row">
+          <div><label>Fisik rencana (%)</label><input type="number" step="0.01" id="fFR"></div>
+          <div><label>Fisik realisasi (%)</label><input type="number" step="0.01" id="fFA"></div>
+          <div><label>Keuangan rencana (%)</label><input type="number" step="0.01" id="fKR"></div>
+          <div><label>Keuangan realisasi (%)</label><input type="number" step="0.01" id="fKA"></div>
+        </div>
+        <div class="row">
+          <div><label>Permasalahan (1 baris = 1 poin)</label><textarea id="fMasalah"></textarea></div>
+          <div><label>Tindak lanjut (1 baris = 1 poin)</label><textarea id="fTL"></textarea></div>
+        </div>
+        <details style="margin-top:10px">
+          <summary>Data lengkap (JSON, lanjutan)</summary>
+          <textarea id="jsonBox" style="min-height:160px;font-family:monospace;font-size:11px"></textarea>
+          <button class="sec" id="btnJsonApply" style="margin-top:6px">Terapkan JSON</button>
+        </details>
+      </div>
+    </section>
+
+    <section class="card" id="cardDasar" hidden>
+      <h2>2. Profil dasar kegiatan</h2>
+      <details>
+        <summary>Buka / tutup isian (kontrak, lokasi, latar belakang, pihak)</summary>
+        <div class="row" id="dasarGrid"></div>
+        <label>Lingkup pekerjaan (1 baris = 1 poin)</label><textarea id="dLingkup"></textarea>
+        <label>Latar belakang (pisahkan paragraf dengan baris kosong)</label><textarea id="dLatar"
+          style="min-height:120px"></textarea>
+        <label>Maksud dan tujuan (pisahkan paragraf dengan baris kosong)</label><textarea id="dMaksud"></textarea>
+        <label>Pihak terkait (konsultan, kontraktor, dst.)</label>
+        <div id="pihakBox"></div>
+        <button class="sec" id="btnPihak" style="margin-top:6px">+ Tambah pihak</button>
+      </details>
+    </section>
+
+    <section class="card" id="cardFoto" hidden>
+      <h2>3. Gambar &amp; foto — tempel dengan <b>Ctrl+V</b></h2>
+      <p class="mut" style="margin:0">Salin gambar dari PowerPoint, PDF, Excel, atau tangkapan layar (Win+Shift+S), lalu
+        tekan Ctrl+V di halaman ini. Tidak perlu disimpan dulu.</p>
+      <div class="chips" id="chips"></div>
+      <div class="replace-banner" id="replaceBanner" hidden></div>
+      <div class="paste" id="pasteZone"><b>Ctrl+V</b> di sini · atau seret gambar · <button class="sec" id="btnClip"
+          style="padding:6px 10px">Tempel dari clipboard</button> · <label class="btn sec"
+          style="margin:0;padding:6px 10px;display:inline-block">Pilih file<input type="file" id="fileImg"
+            accept="image/*" multiple hidden></label>
+        <div id="pasteMsg" style="margin-top:6px"></div>
+      </div>
+      <div class="slots" id="slots"></div>
+      <label>Kelompok aktif (dipakai foto lapangan yang baru ditempel)</label>
+      <input type="text" id="kelAktif" list="kelList" placeholder="mis. Gedung A1">
+      <datalist id="kelList"></datalist>
+      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="sec" id="btnKelKosong">Terapkan ke
+          foto tanpa kelompok</button><span class="mut" id="trayInfo" style="align-self:center"></span></div>
+      <div class="tray" id="tray"></div>
+    </section>
+
+    <section class="card" id="cardKron" hidden>
+      <h2>4. Kronologis (dari data DMS)</h2>
+      <div class="mut" id="kronInfo"></div>
+      <details open>
+        <summary>Baris kronologis (hilangkan centang untuk mengecualikan)</summary>
+        <div id="kronTable" style="overflow-x:auto"></div>
+      </details>
+    </section>
+
+    <section class="card" id="cardGen" hidden>
+      <h2>5. Buat &amp; simpan</h2>
+      <div class="plan" id="planBox"></div>
+      <ul class="warn" id="warnList"></ul>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button id="btnGen" class="ok">Buat &amp; unduh PPTX</button>
+        <button id="btnShare" class="sec" hidden>Bagikan / simpan (HP)</button>
+      </div>
+      <div id="genMsg"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+      <div class="row">
+        <div><label>Nama pembuat</label><select id="selPic"></select></div>
+      </div>
+      <label style="display:flex;gap:8px;align-items:flex-start;font-weight:600;margin-top:10px"><input type="checkbox"
+          id="chkMaster" style="margin-top:2px"> <span>Simpan profil dasar &amp; gambar statis (rencana, kondisi
+          awal/berikutnya) sebagai default kegiatan ini</span></label>
+      <button id="btnSave" class="gold" style="margin-top:8px">Simpan ke OneDrive</button>
+      <p class="mut" id="saveHint" style="margin:6px 0 0"></p>
+      <div id="saveMsg"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+      const Kit = ProfilKit, B = ProfilBuilders, E = PptxEngine;
+      const $ = id => document.getElementById(id);
+      const CFG = window.PROFIL_CONFIG || {};
+      const PS = ProfilSave, LV = ProfilLive, PM = ProfilMaster, AI = ProfilAI;
+      const S = { data: null, manifest: null, template: null, images: {}, target: 'foto', replaceMode: null, lastBlob: null, uid: 0, master: null, masterFound: false, lastReport: null };
+      const TARGETS = { foto: 'Foto lapangan', kurvas: 'Kurva S', design3d: 'Gambar rencana / 3D', pra: 'Foto kondisi awal', pasca: 'Foto kondisi berikutnya' };
+      const REPLACE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M17 2.1l4 4-4 4"/><path d="M21 6.1H8a5 5 0 0 0-5 5v1"/><path d="M7 21.9l-4-4 4-4"/><path d="M3 17.9h13a5 5 0 0 0 5-5v-1"/></svg>';
+      const EMBED = window.PROFIL_EMBED || null;
+
+      /* ---------- pemuatan aset ---------- */
+      const b64ToBytes = b => { const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++)u[i] = s.charCodeAt(i); return u; };
+      async function loadCore() {
+        if (S.template) return;
+        if (EMBED) { S.template = b64ToBytes(EMBED.template); S.manifest = EMBED.manifest; return; }
+        const [t, m] = await Promise.all([fetch('templates/Template_Profil_Kegiatan.pptx'), fetch('templates/template_manifest.json')]);
+        if (!t.ok || !m.ok) throw new Error('Template tidak ditemukan. Jalankan lewat server (mis. Live Server), bukan file://');
+        S.template = new Uint8Array(await t.arrayBuffer()); S.manifest = await m.json();
+      }
+      function thumbFromBmp(bmp, bytes) {
+        try {
+          const k = Math.min(1, 260 / Math.max(bmp.width, bmp.height)); const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(bmp.width * k)); c.height = Math.max(1, Math.round(bmp.height * k));
+          const x = c.getContext('2d'); if (!x) throw 0; x.drawImage(bmp, 0, 0, c.width, c.height); const u = c.toDataURL('image/jpeg', 0.65); c.width = c.height = 0; return u;
+        }
+        catch (e) { return URL.createObjectURL(new Blob([bytes])); }
+      }
+      async function imgFromBytes(bytes, ext) {
+        const blob = new Blob([bytes], { type: ext === 'png' ? 'image/png' : 'image/jpeg' });
+        const bmp = await createImageBitmap(blob); const r = { data: bytes, w: bmp.width, h: bmp.height, ext: ext === 'png' ? 'png' : 'jpg' };
+        r.url = thumbFromBmp(bmp, bytes); if (bmp.close) bmp.close(); r.hash = hashBytes(bytes); return r;
+      }
+      function hashBytes(u) { let h = 2166136261 >>> 0; const step = Math.max(1, Math.floor(u.length / 40000)); for (let i = 0; i < u.length; i += step) { h ^= u[i]; h = Math.imul(h, 16777619) >>> 0; } return h.toString(16) + ':' + u.length; }
+      async function loadSample() {
+        msg('genMsg', ''); await loadCore();
+        const data = EMBED ? EMBED.data : await (await fetch('sample_data/pohuwato.json')).json();
+        S.images = {};
+        const keys = new Set(); const add = k => k && keys.add(k);
+        const pd = data.profilDasar || {}; Object.values(pd.aset || {}).forEach(add); add((data.progres || {}).kurvaS); (data.foto || []).forEach(f => add(f.file));
+        for (const k of keys) {
+          let bytes;
+          if (EMBED) bytes = b64ToBytes(EMBED.files[k]); else bytes = new Uint8Array(await (await fetch('sample_data/' + k)).arrayBuffer());
+          S.images[k] = await imgFromBytes(bytes, 'jpg');
+        }
+        setData(data);
+      }
+
+      /* ---------- profil dasar tersimpan (flow BacaProfil) ---------- */
+      const info = t => { $('masterInfo').textContent = t; };
+      function markMaster(why) { // profil dasar / gambar statis berubah: tanpa ini master & aset TIDAK ikut terkirim dan flow melewatinya
+        if ($('chkMaster')) $('chkMaster').checked = true; if (why) info(why + ' Akan disimpan sebagai default kegiatan saat Anda menekan Simpan (kotak di bagian Simpan sudah dicentang).');
+      }
+      const nonEmpty = v => !(v === '' || v === null || v === undefined || (Array.isArray(v) && !v.length));
+      async function loadMasterProfile() {
+        S.lastReport = null; S.masterFound = false; $('btnPrev').hidden = true; info('');
+        if (!CFG.readFlowUrl) { info('Flow BacaProfil belum dikonfigurasi: profil dasar diisi manual.'); $('chkMaster').checked = true; return; }
+        const hRead = Kit.flowUrlHint(CFG.readFlowUrl); if (hRead) { info('Flow BacaProfil: ' + hRead + ' Profil dasar diisi manual.'); $('chkMaster').checked = true; return; }
+        info('Membaca profil dasar tersimpan…');
+        try {
+          const r = await PM.fetchProfil(CFG.readFlowUrl, S.data.kegiatan, { timeoutMs: 60000 });
+          if (!r.found) { info('Belum ada profil dasar tersimpan untuk kegiatan ini. Isi sekali, lalu centang "Simpan profil dasar…" saat menyimpan.'); $('chkMaster').checked = true; return; }
+          S.masterFound = true; const pd = S.data.profilDasar;
+          Object.keys(r.profilDasar).forEach(k => { if (k !== 'aset' && nonEmpty(r.profilDasar[k])) pd[k] = r.profilDasar[k]; });
+          pd.aset = {}; for (const a of r.assets) { const im = await imgFromBytes(a.bytes, a.ext); const key = 'aset:' + a.nama + ':' + (++S.uid); S.images[key] = im; pd.aset[a.nama] = key; }
+          S.lastReport = r.laporan[0] || null; renderDasar(); renderAll(); $('chkMaster').checked = false;
+          info(`Profil dasar dimuat${r.diubahOleh ? ' (diubah ' + r.diubahOleh + ')' : ''} dengan ${r.assets.length} gambar statis.` + (S.lastReport ? ` Laporan terakhir: ${Kit.fmtTanggal(S.lastReport.tanggal)}.` : ''));
+          if (S.lastReport) { $('btnPrev').hidden = false; $('btnPrev').textContent = '↺ Salin angka & catatan dari laporan ' + Kit.fmtTanggal(S.lastReport.tanggal); }
+        } catch (e) { info('Gagal membaca profil dasar: ' + e.message + ' — isi manual.'); $('chkMaster').checked = true; }
+      }
+            $('btnPrev').onclick = () => {
+        const r = S.lastReport; if (!r) return; const p = S.data.progres;
+        p.fisik = { rencana: r.fisikRencana ?? undefined, realisasi: r.fisikRealisasi ?? undefined }; p.keuangan = { rencana: r.keuRencana ?? undefined, realisasi: r.keuRealisasi ?? undefined }; p.masalah = r.masalah.slice(); p.tindakLanjut = r.tindakLanjut.slice();
+        let fotoMsg = '';
+        if (r.foto && r.foto.length) {
+          const boleh = !S.data.foto.length || confirm(`Ada ${S.data.foto.length} foto di baki saat ini. Timpa dengan ${r.foto.length} slot foto (kelompok/keterangan) dari laporan sebelumnya? Gambar tetap perlu ditempel ulang satu per satu.`);
+          if (boleh) {
+            S.data.foto = r.foto.map(f => ({ file: 'missing:' + (++S.uid) + ':' + Date.now().toString(36), kelompok: f.kelompok || '', keterangan: f.keterangan || '', sorotan: !!f.sorotan }));
+            fotoMsg = ` ${r.foto.length} slot foto disiapkan (kelompok & keterangan ikut) — tempel/ganti gambarnya satu per satu lewat tombol ↻ pada tiap kartu.`;
+          }
+        }
+        fillProgres(); renderAll(); msg('genMsg', 'Angka dan catatan dari laporan ' + Kit.fmtTanggal(r.tanggal) + ' disalin.' + fotoMsg + ' Perbarui sebelum dipakai.', 0);
+      };
+
+      /* ---------- Rapikan dengan AI ---------- */
+      function attachAI(id, kind) {
+        const ta = $(id), box = document.createElement('div'); box.innerHTML = '<button class="sec" style="margin-top:4px;padding:6px 10px;font-size:12px">✨ Rapikan dengan AI</button><div class="aiout" hidden></div>';
+        ta.insertAdjacentElement('afterend', box); const btn = box.firstChild, out = box.lastChild;
+        btn.onclick = async () => {
+          const keys = S.master && S.master.geminiKeys; if (!keys || !keys.length) { out.hidden = false; out.textContent = 'Kunci Gemini diambil dari data DMS: tekan "Muat dari DMS" dulu.'; return; }
+          if (!ta.value.trim()) return; btn.disabled = true; out.hidden = false; out.textContent = 'Merapikan…';
+          try {
+            const r = await AI.rapikan({ keys, kind, text: ta.value }); const warn = AI.angkaBerubah(ta.value, r.text);
+            out.innerHTML = ''; const t = document.createElement('div'); t.textContent = r.text; out.appendChild(t);
+            if (warn) { const w = document.createElement('div'); w.style.cssText = 'color:#b91c1c;font-weight:700;margin-top:6px'; w.textContent = '⚠ Angka pada hasil berbeda dari teks asli — periksa sebelum dipakai.'; out.appendChild(w); }
+            const use = document.createElement('button'); use.textContent = 'Pakai hasil'; use.style.cssText = 'margin:6px 6px 0 0;padding:6px 10px;font-size:12px'; use.onclick = () => { ta.value = r.text; ta.dispatchEvent(new Event('input')); out.hidden = true; };
+            const no = document.createElement('button'); no.className = 'sec'; no.textContent = 'Batal'; no.style.cssText = 'margin-top:6px;padding:6px 10px;font-size:12px'; no.onclick = () => { out.hidden = true; }; out.append(use, no);
+          } catch (e) { out.textContent = 'Gagal: ' + e.message; } finally { btn.disabled = false; }
+        };
+      }
+      [['dLatar', 'latar'], ['dMaksud', 'maksud'], ['fMasalah', 'masalah'], ['fTL', 'tindak']].forEach(([i, k]) => attachAI(i, k));
+
+      /* ---------- data live DMS ---------- */
+      $('btnLive').disabled = !!EMBED || !CFG.getDataFlowUrl;
+      if (EMBED) $('btnLive').title = 'Tidak tersedia di halaman demo';
+      $('btnLive').onclick = async () => {
+        const b = $('btnLive'); b.disabled = true; msg('genMsg', 'Memuat data master dari DMS…', 0);
+        try {
+          await loadCore(); S.master = await LV.fetchMaster({ url: CFG.getDataFlowUrl });
+          const sp = $('selProv'); sp.innerHTML = '<option value="">— pilih provinsi —</option>' + S.master.provinsi.filter(p => p !== '19. Kegiatan Lainnya').map(p => `<option>${esc(p)}</option>`).join('');
+          sp.onchange = () => { const l = S.master.kegiatanByProv[sp.value] || []; $('selKeg').innerHTML = '<option value="">— pilih kegiatan —</option>' + l.map(k => `<option>${esc(k)}</option>`).join(''); };
+          $('livePick').hidden = false; $('dataInfo').textContent = `Data DMS dimuat: ${S.master.rows.length} baris dokumen, ${S.master.provinsi.length} provinsi.`; msg('genMsg', '', 0);
+        } catch (e) { msg('genMsg', 'Gagal memuat data DMS: ' + e.message, 1); } finally { b.disabled = false; }
+      };
+      $('btnStart').onclick = async () => {
+        const prov = $('selProv').value, keg = $('selKeg').value; if (!prov || !keg) return msg('genMsg', 'Pilih provinsi dan kegiatan dulu.', 1);
+        const today = new Date(); const iso = today.getFullYear() + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + String(today.getDate()).padStart(2, '0');
+        S.images = {};
+        setData({
+          kegiatan: { provinsi: prov, namaKegiatan: keg },
+          profilDasar: { judul: keg.replace(/^\s*\d+\s*[.)]\s*/, ''), kodeKontrak: 'SYC', tahun: today.getFullYear(), lokasiSingkat: '', lokasiPekerjaan: '', lingkup: [], latarBelakang: [], maksudTujuan: [], pihak: [{ peran: 'Konsultan Supervisi', nama: '', nilai: null }, { peran: 'Kontraktor Pelaksana', nama: '', nilai: null }], aset: {} },
+          progres: { tanggalStatus: iso, fisik: {}, keuangan: {}, masalah: [], tindakLanjut: [] }, foto: [], kronologisRaw: S.master.rows, kronologisExclude: []
+        });
+        await loadMasterProfile();
+      };
+      $('btnDraft').onclick = async () => { const blob = new Blob([JSON.stringify(PS.snapshot(S.data), null, 1)], { type: 'application/json' }); await saveFile(blob, `Draf profil - ${(S.data.profilDasar.judul || 'kegiatan').replace(/[\\/:*?"<>|]/g, '-').slice(0, 40)}.json`); };
+
+      /* ---------- state <-> form ---------- */
+      function fillProgres() {
+        const d = S.data; $('fTgl').value = tglToInput(d.progres.tanggalStatus);
+        $('fFR').value = d.progres.fisik.rencana ?? ''; $('fFA').value = d.progres.fisik.realisasi ?? ''; $('fKR').value = d.progres.keuangan.rencana ?? ''; $('fKA').value = d.progres.keuangan.realisasi ?? '';
+        $('fMasalah').value = (d.progres.masalah || []).join('\n'); $('fTL').value = (d.progres.tindakLanjut || []).join('\n');
+      }
+      const tglToInput = s => { const t = Kit.parseTgl(s); return t ? `${t.y}-${String(t.m).padStart(2, '0')}-${String(t.d).padStart(2, '0')}` : ''; };
+      function setData(d) {
+        d.profilDasar = d.profilDasar || {}; d.profilDasar.aset = d.profilDasar.aset || {}; d.progres = d.progres || { fisik: {}, keuangan: {} }; d.progres.fisik = d.progres.fisik || {}; d.progres.keuangan = d.progres.keuangan || {}; d.foto = d.foto || [];
+        S.data = d;
+        S.replaceMode = null;                 // ← tambahkan baris ini
+        $('fJudul').value = d.profilDasar.judul || '';
+        fillProgres();
+        $('jsonBox').value = JSON.stringify(d, null, 1);
+        ['cardMain', 'cardDasar', 'cardFoto', 'cardKron', 'cardGen'].forEach(i => $(i).hidden = false);
+        $('dataInfo').textContent = `${d.kegiatan ? d.kegiatan.provinsi + ' — ' + d.kegiatan.namaKegiatan : '(tanpa kegiatan)'}`;
+        $('btnDraft').hidden = false;
+        renderDasar(); renderAll();
+      }
+      function readForm() {
+        const d = S.data; if (!d) return;
+        d.profilDasar.judul = $('fJudul').value; const v = $('fTgl').value; d.progres.tanggalStatus = v ? v.replace(/-/g, '.') : '';
+        const n = x => x === '' ? undefined : Number(x); d.progres.fisik = { rencana: n($('fFR').value), realisasi: n($('fFA').value) }; d.progres.keuangan = { rencana: n($('fKR').value), realisasi: n($('fKA').value) };
+        const lines = t => t.split('\n').map(s => s.trim()).filter(Boolean); d.progres.masalah = lines($('fMasalah').value); d.progres.tindakLanjut = lines($('fTL').value);
+      }
+      ['fJudul', 'fTgl', 'fFR', 'fFA', 'fKR', 'fKA', 'fMasalah', 'fTL'].forEach(i => $(i).addEventListener('input', () => { readForm(); renderPlan(); }));
+      $('btnJsonApply').onclick = () => { try { setData(JSON.parse($('jsonBox').value)); } catch (e) { msg('genMsg', 'JSON tidak valid: ' + e.message, 1); } };
+      $('fileJson').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { await loadCore(); S.images = {}; const j = JSON.parse(await f.text()); if (S.master && !j.kronologisRaw) { j.kronologisRaw = S.master.rows; } setData(j); msg('genMsg', 'JSON dimuat. Gambar harus ditempel/diunggah ulang' + (S.master ? '.' : '; kronologis butuh data DMS (tekan Muat dari DMS dulu).'), 0); } catch (err) { msg('genMsg', err.message, 1); } };
+      $('btnSample').onclick = () => loadSample().catch(e => msg('genMsg', e.message, 1));
+
+      /* ---------- tempel / unggah gambar ---------- */
+      function chips() {
+        $('chips').innerHTML = '';
+        Object.entries(TARGETS).forEach(([k, l]) => { const c = document.createElement('span'); c.className = 'chip' + (S.target === k ? ' on' : ''); c.textContent = (S.target === k ? '✓ ' : '') + l; c.onclick = () => { S.target = k; chips(); renderSlots(); }; $('chips').appendChild(c); });
+      }
+
+      function renderReplaceBanner() {
+        const b = $('replaceBanner'), pz2 = $('pasteZone'); if (!b) return;
+        if (!S.replaceMode) { b.hidden = true; if (pz2) pz2.classList.remove('armed'); return; }
+        if (pz2) pz2.classList.add('armed');
+        const label = S.replaceMode.type === 'foto' ? `Foto lapangan #${S.replaceMode.index + 1}` : TARGETS[S.replaceMode.key];
+        b.hidden = false;
+        b.innerHTML = `${REPLACE_ICON} Mode ganti aktif: <b>${esc(label)}</b> — tempel (Ctrl+V), seret, atau pilih file untuk menggantinya. <button type="button" class="sec" id="btnCancelReplaceInline" style="padding:4px 10px;font-size:11px">Batal</button>`;
+        $('btnCancelReplaceInline').onclick = disarmReplace;
+      }
+      function armReplace(mode) {
+        S.replaceMode = mode; renderReplaceBanner(); renderSlots(); renderTray();
+        // baris scrollIntoView dihapus — halaman tetap diam di posisi foto yang sedang diganti
+      }
+      function disarmReplace() { S.replaceMode = null; renderReplaceBanner(); renderSlots(); renderTray(); }
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.replaceMode) disarmReplace(); });
+
+      const slotRef = { kurvas: () => S.data.progres, design3d: () => S.data.profilDasar.aset, pra: () => S.data.profilDasar.aset, pasca: () => S.data.profilDasar.aset };
+      const slotKey = k => k === 'kurvas' ? 'kurvaS' : k;
+      function getSlot(k) { return slotRef[k]()[slotKey(k)]; }
+      function setSlot(k, v) { slotRef[k]()[slotKey(k)] = v; }
+      function renderSlots() {
+        if (!S.data) return;
+        const box = $('slots'); box.innerHTML = '';
+        ['kurvas', 'design3d', 'pra', 'pasca'].forEach(k => {
+          const key = getSlot(k), im = key && S.images[key]; const d = document.createElement('div');
+          const isArmed = S.replaceMode && S.replaceMode.type === 'slot' && S.replaceMode.key === k;
+          d.className = 'slot' + (S.target === k ? ' on' : '') + (isArmed ? ' armed' : '');
+          d.innerHTML = (im ? `<img src="${im.url}">` : `<img alt="" style="visibility:hidden">`) + `<b>${TARGETS[k]}</b><br><span class="mut">${im ? im.w + '×' + im.h : 'kosong'}</span>`;
+          d.onclick = () => { S.target = k; S.replaceMode = null; renderReplaceBanner(); chips(); renderSlots(); };
+          if (im) {
+            const g = document.createElement('button'); g.className = 'sec'; g.innerHTML = REPLACE_ICON + ' ganti'; g.style.cssText = 'padding:3px 8px;font-size:11px;margin-top:3px;margin-right:4px;display:inline-flex;align-items:center;gap:4px';
+            g.onclick=ev=>{ev.stopPropagation(); isArmed ? disarmReplace() : armReplace({type:'slot',key:k});};
+            d.appendChild(g);
+            const x = document.createElement('button'); x.className = 'sec'; x.textContent = 'hapus'; x.style.cssText = 'padding:3px 8px;font-size:11px;margin-top:3px';
+            x.onclick = ev => { ev.stopPropagation(); setSlot(k, null); if (['design3d', 'pra', 'pasca'].includes(k)) markMaster(); renderAll(); };
+            d.appendChild(x);
+          }
+          box.appendChild(d);
+        });
+      }
+      const newKey = () => 'foto:' + (++S.uid) + ':' + Date.now().toString(36);
+      async function ingest(files, how) {
+        if (!S.data) { msg('pasteMsg', 'Muat data dulu.', 1); return; }
+
+        if (S.replaceMode) {
+          const mode = S.replaceMode, f = files[0];
+          if (!f) { msg('pasteMsg', 'Tidak ada gambar terdeteksi.', 1); return; }
+          try {
+            msg('pasteMsg', 'Mengganti gambar…', 0);
+            const p = await Kit.prepareImageFile(f, 1600, 0.82);
+            const im = await imgFromBytes(p.data, 'jpg'); const key = newKey(); S.images[key] = im;
+            if (mode.type === 'foto') {
+              const item = S.data.foto[mode.index];
+              if (item) item.file = key;
+            } else {
+              setSlot(mode.key, key);
+              if (['design3d', 'pra', 'pasca'].includes(mode.key)) markMaster('Gambar statis "' + TARGETS[mode.key] + '" diganti.');
+            }
+            msg('pasteMsg', '✓ Gambar berhasil diganti.' + (files.length > 1 ? ' (gambar tambahan diabaikan)' : ''), 0);
+          } catch (e) {
+            console.error(e);
+            msg('pasteMsg', 'Gagal mengganti gambar: ' + e.message, 1);
+          } finally {
+            S.replaceMode = null; renderReplaceBanner(); renderAll();
+          }
+          return;
+        }
+
+        let n = 0, fail = 0;
+        for (const f of files) {
+          try {
+            msg('pasteMsg', 'Memproses gambar ' + (n + 1) + '/' + files.length + '…', 0);
+            const p = await Kit.prepareImageFile(f, 1600, 0.82);
+            const im = await imgFromBytes(p.data, 'jpg'); const key = newKey(); S.images[key] = im;
+            if (S.target === 'foto') { S.data.foto.push({ file: key, kelompok: $('kelAktif').value.trim(), keterangan: '', sorotan: false }); }
+            else { setSlot(S.target, key); if (['design3d', 'pra', 'pasca'].includes(S.target)) markMaster('Gambar statis "' + TARGETS[S.target] + '" diganti.'); }
+            n++;
+          } catch (e) { fail++; console.error(e); }
+        }
+        msg('pasteMsg', (n ? `✓ ${n} gambar ditambahkan ke “${TARGETS[S.target]}”. ` : '') + (fail ? `${fail} gagal dibaca.` : ''), fail && !n);
+        renderAll();
+      }
+      async function htmlImages(html) {
+        const out = []; const doc = new DOMParser().parseFromString(html, 'text/html');
+        for (const im of doc.querySelectorAll('img')) { const s = im.getAttribute('src') || ''; if (s.startsWith('data:image')) { try { out.push(await (await fetch(s)).blob()); } catch (e) { } } }
+        return out;
+      }
+      document.addEventListener('paste', async e => {
+        const cd = e.clipboardData; if (!cd) return;
+        // Tempel teks ke kolom isian harus tetap normal: PowerPoint/Word menyalin teks SEKALIGUS gambar-nya, jadi jangan dicegat
+        const tg = e.target, editable = tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.isContentEditable);
+        const hasText = [...(cd.types || [])].includes('text/plain') && (cd.getData('text/plain') || '').trim() !== '';
+        if (editable && hasText) return;
+        let files = [...cd.items].filter(i => i.kind === 'file' && i.type.startsWith('image/')).map(i => i.getAsFile()).filter(Boolean);
+        if (!files.length && cd.types.includes('text/html')) { files = await htmlImages(cd.getData('text/html')); }
+        if (!files.length) return;                 // bukan gambar: biarkan tempel teks biasa
+        e.preventDefault(); ingest(files, 'paste');
+      });
+      $('btnClip').onclick = async () => {
+        try {
+          const items = await navigator.clipboard.read(); const files = [];
+          for (const it of items) { const t = it.types.find(x => x.startsWith('image/')); if (t) files.push(await it.getType(t)); }
+          if (!files.length) return msg('pasteMsg', 'Clipboard tidak berisi gambar.', 1);
+          ingest(files, 'clip');
+        } catch (e) { msg('pasteMsg', 'Tidak bisa membaca clipboard (' + e.name + '). Pakai Ctrl+V, atau tekan-lama lalu Tempel.', 1); }
+      };
+      $('fileImg').onchange = e => { ingest([...e.target.files], 'file'); e.target.value = ''; };
+      const pz = $('pasteZone');
+      ['dragover', 'dragenter'].forEach(ev => pz.addEventListener(ev, e => { e.preventDefault(); pz.classList.add('hot'); }));
+      ['dragleave', 'drop'].forEach(ev => pz.addEventListener(ev, e => { e.preventDefault(); pz.classList.remove('hot'); }));
+      pz.addEventListener('drop', e => { const f = [...e.dataTransfer.files].filter(x => x.type.startsWith('image/')); if (f.length) ingest(f, 'drop'); });
+
+      /* ---------- baki foto lapangan ---------- */
+      function renderTray() {
+        const T = $('tray'); T.innerHTML = ''; const list = S.data.foto; const seen = {};
+        const kel = [...new Set(list.map(f => f.kelompok).filter(Boolean))]; $('kelList').innerHTML = kel.map(k => `<option value="${k.replace(/"/g, '&quot;')}">`).join('');
+        const nSor = list.filter(f => f.sorotan).length;
+        $('trayInfo').textContent = `${list.length} foto · ${nSor} sorotan (maks. ${(S.manifest && S.manifest.rules.maxPhotosPerSlide.profil) || 6} tampil di slide profil)`;
+        list.forEach((f, i) => {
+          const isArmed = S.replaceMode && S.replaceMode.type === 'foto' && S.replaceMode.index === i;
+          const im = S.images[f.file]; const dupOf = im && seen[im.hash]; if (im) seen[im.hash] = seen[im.hash] || (i + 1);
+          const d = document.createElement('div'); d.className = 'ph' + (f.sorotan ? ' star' : '') + (isArmed ? ' armed' : '');
+          d.innerHTML = `${dupOf ? `<span class="dup">mirip foto #${dupOf}</span>` : ''}${im ? `<img src="${im.url}">` : '<div style="height:110px;background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:12px">gambar hilang</div>'}
+      <input type="text" placeholder="Kelompok" value="${(f.kelompok || '').replace(/"/g, '&quot;')}" list="kelList" data-k="kelompok">
+      <input type="text" placeholder="Keterangan (mis. Tampak Depan)" value="${(f.keterangan || '').replace(/"/g, '&quot;')}" data-k="keterangan">
+      <div class="bar"><button class="sec" data-a="up" title="Naik">↑</button><button class="sec" data-a="down" title="Turun">↓</button><button class="${f.sorotan ? 'gold' : 'sec'}" data-a="star" title="Sorotan">★</button><button class="${isArmed ? 'gold' : 'sec'}" data-a="replace" title="Ganti gambar (Ctrl+V)">${REPLACE_ICON}</button><button class="sec" data-a="del" title="Hapus">✕</button></div>`;
+          d.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { f[inp.dataset.k] = inp.value; renderPlan(); }));
+          d.querySelectorAll('button').forEach(b => b.onclick = () => {
+            const a = b.dataset.a;
+            if (a === 'up' && i > 0) [list[i - 1], list[i]] = [list[i], list[i - 1]];
+            if (a === 'down' && i < list.length - 1) [list[i + 1], list[i]] = [list[i], list[i + 1]];
+            if (a === 'star') f.sorotan = !f.sorotan;
+            if(a==='replace'){ isArmed ? disarmReplace() : armReplace({type:'foto',index:i}); return; }
+            if (a === 'del') list.splice(i, 1);
+            renderAll();
+          });
+          T.appendChild(d);
+        });
+      }
+      $('btnKelKosong').onclick = () => { const k = $('kelAktif').value.trim(); if (!k) return; S.data.foto.forEach(f => { if (!f.kelompok) f.kelompok = k; }); renderAll(); };
+
+      /* ---------- profil dasar ---------- */
+      const getP = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+      const setP = (o, p, v) => { const ks = p.split('.'); let a = o; ks.slice(0, -1).forEach(k => a = a[k] = a[k] || {}); a[ks[ks.length - 1]] = v; };
+      const DASAR = [['profilDasar.kodeKontrak', 'Kode kontrak (SYC/MYC)', 'text'], ['profilDasar.tahun', 'Tahun anggaran', 'number'], ['profilDasar.lokasiSingkat', 'Lokasi singkat (header slide)', 'text'], ['profilDasar.lokasiPekerjaan', 'Lokasi pekerjaan (tabel)', 'text'],
+      ['profilDasar.tglMulai', 'Tanggal mulai', 'date'], ['profilDasar.tglSelesai', 'Tanggal selesai', 'date'], ['profilDasar.luasPersil', 'Luas persil (m²)', 'number'], ['profilDasar.luasBangunan', 'Luas bangunan (m²)', 'number'],
+      ['profilDasar.capPra', 'Keterangan foto kondisi awal', 'text'], ['profilDasar.capPasca', 'Keterangan foto kondisi berikutnya', 'text']];
+      const lines = t => t.split('\n').map(x => x.trim()).filter(Boolean), paras = t => t.split(/\n\s*\n/).map(x => x.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+      function renderDasar() {
+        const d = S.data, g = $('dasarGrid'); g.innerHTML = '';
+        DASAR.forEach(([path, label, type]) => {
+          const w = document.createElement('div'); const cur = getP(d, path); const isDate = type === 'date';
+          w.innerHTML = `<label>${label}</label><input type="${type}" ${type === 'number' ? 'step="any"' : ''}>`; const inp = w.querySelector('input');
+          inp.value = cur == null ? '' : (isDate ? tglToInput(cur) : cur);
+          inp.oninput = () => { markMaster(); const v = inp.value; setP(d, path, v === '' ? (type === 'number' ? null : '') : (isDate ? v.replace(/-/g, '.') : (type === 'number' ? Number(v) : v))); renderPlan(); };
+          g.appendChild(w);
+        });
+        const pd = d.profilDasar; $('dLingkup').value = (pd.lingkup || []).join('\n'); $('dLatar').value = (pd.latarBelakang || []).join('\n\n'); $('dMaksud').value = (pd.maksudTujuan || []).join('\n\n');
+        $('dLingkup').oninput = e => { markMaster(); pd.lingkup = lines(e.target.value); renderPlan(); }; $('dLatar').oninput = e => { markMaster(); pd.latarBelakang = paras(e.target.value); renderPlan(); }; $('dMaksud').oninput = e => { markMaster(); pd.maksudTujuan = paras(e.target.value); renderPlan(); };
+        renderPihak();
+      }
+      function renderPihak() {
+        const pd = S.data.profilDasar; pd.pihak = pd.pihak || []; const box = $('pihakBox'); box.innerHTML = '';
+        pd.pihak.forEach((p, i) => {
+          const r = document.createElement('div'); r.className = 'pihak';
+          r.innerHTML = `<input type="text" placeholder="Peran" list="peranList" value="${esc(p.peran || '')}"><input type="text" placeholder="Nama perusahaan" value="${esc(p.nama || '')}"><input type="number" step="any" placeholder="Nilai kontrak (Rp)" value="${p.nilai == null ? '' : p.nilai}"><button class="sec">✕</button>`;
+          const [a, b, c, x] = r.children; a.oninput = () => { markMaster(); p.peran = a.value; renderPlan(); }; b.oninput = () => { markMaster(); p.nama = b.value; renderPlan(); }; c.oninput = () => { markMaster(); p.nilai = c.value === '' ? null : Number(c.value); renderPlan(); }; x.onclick = () => { markMaster(); pd.pihak.splice(i, 1); renderPihak(); renderPlan(); };
+          box.appendChild(r);
+        });
+        if (!document.getElementById('peranList')) { const dl = document.createElement('datalist'); dl.id = 'peranList'; dl.innerHTML = ['Konsultan Perencana', 'Konsultan Supervisi', 'Konsultan Pengawas', 'Kontraktor Pelaksana'].map(x => `<option value="${x}">`).join(''); document.body.appendChild(dl); }
+      }
+      $('btnPihak').onclick = () => { markMaster(); S.data.profilDasar.pihak.push({ peran: '', nama: '', nilai: null }); renderPihak(); };
+
+      /* ---------- kronologis + rencana ---------- */
+      function renderKron() {
+        const d = S.data, k = d.kegiatan || {}; const cands = B.kronologisCandidates(d.kronologisRaw, k.provinsi, k.namaKegiatan); const ex = new Set(d.kronologisExclude || []);
+        const n = cands.filter(c => !ex.has(c.id)).length;
+        $('kronInfo').textContent = cands.length ? `${n} dari ${cands.length} dokumen bertanda kronologis dipakai (urut tanggal).` + (cands.some(c => !c.nomor) ? ` ${cands.filter(c => !c.nomor).length} tanpa nomor surat.` : '') : 'Tidak ada dokumen bertanda kronologis untuk kegiatan ini: slide kronologis dilewati. (Tandai lewat Rekap ND & Surat → Kelola Berkas → "Tampilkan di Timeline Kronologis".)';
+        $('kronTable').innerHTML = cands.length ? '<table class="kron"><tr><th></th><th>Tanggal</th><th>Uraian</th><th>Nomor</th><th>Dari</th><th>Ke</th></tr>' + cands.map((r, i) => `<tr><td><input type="checkbox" data-i="${i}" ${ex.has(r.id) ? '' : 'checked'}></td><td>${esc(r.tanggal)}</td><td>${esc(r.uraian)}</td><td>${esc(r.nomor)}</td><td>${esc(r.dari)}</td><td>${esc(r.ke)}</td></tr>`).join('') + '</table>' : '';
+        $('kronTable').querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => {
+          const id = cands[+cb.dataset.i].id; const set = new Set(S.data.kronologisExclude || []); cb.checked ? set.delete(id) : set.add(id); S.data.kronologisExclude = [...set];
+          const nn = cands.filter(c => !set.has(c.id)).length; $('kronInfo').textContent = `${nn} dari ${cands.length} dokumen bertanda kronologis dipakai (urut tanggal).`; renderPlan();
+        });
+      }
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      function renderPlan() {
+        if (!S.data || !S.manifest) return;
+        const { plan, warnings } = B.buildSlidePlan(S.data, { manifest: S.manifest });
+        const miss = B.imageKeys(plan).filter(k => !S.images[k]);
+        $('planBox').textContent = B.describePlan(plan);
+        $('warnList').innerHTML = warnings.concat(miss.length ? [`${miss.length} gambar yang dirujuk data belum tersedia (tempel/unggah ulang).`] : []).map(w => `<li>${esc(w)}</li>`).join('');
+        $('btnGen').disabled = miss.length > 0;
+      }
+      function renderAll() { renderReplaceBanner(); chips(); renderSlots(); renderTray(); renderKron(); renderPlan(); }
+
+      /* ---------- simpan berkas ---------- */
+      async function saveFile(blob, name) {
+        if (window.claude && typeof window.claude.use === 'function') {          // halaman terhosting (artifact): unduhan lewat viewer
+          try { const dl = await window.claude.use('downloads'); if (dl) { await dl.save({ filename: name, data: blob }); return 'viewer'; } }
+          catch (e) { if (e && e.code === 'declined') return 'declined'; }
+        }
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); return 'anchor';
+      }
+      /* ---------- generate ---------- */
+      const nowStamp = () => { const d = new Date(); return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0'); };
+      function fileName() { return `Profil ${(S.data.profilDasar.judul || 'Kegiatan').replace(/[\\/:*?"<>|]/g, '-').slice(0, 50)} - ${nowStamp()}.pptx`; }
+      $('btnGen').onclick = async () => {
+        const btn = $('btnGen'); btn.disabled = true; msg('genMsg', 'Menyusun PPTX…', 0); await new Promise(r => setTimeout(r, 30));
+        try {
+          await loadCore(); readForm();
+          const { plan, warnings } = B.buildSlidePlan(S.data, { manifest: S.manifest });
+          const images = {}; B.imageKeys(plan).forEach(k => { if (!S.images[k]) throw new Error('Gambar hilang: ' + k); images[k] = S.images[k]; });
+          const t0 = performance.now();
+          const r = E.render({ templateBytes: S.template, manifest: S.manifest, plan, images });
+          const blob = new Blob([r.bytes], { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' }); S.lastBlob = blob;
+          const how = await saveFile(blob, fileName());
+          msg('genMsg', (how === 'declined' ? 'Simpan dibatalkan. ' : '✓ ') + `${plan.length} slide, ${(blob.size / 1048576).toFixed(1)} MB, ${Math.round(performance.now() - t0)} ms. ` + (r.warnings.length ? 'Catatan: ' + r.warnings.join(' · ') : ''), 0);
+          $('btnShare').hidden = !(navigator.canShare && navigator.canShare({ files: [new File([blob], fileName(), { type: blob.type })] }));
+        } catch (e) { console.error(e); msg('genMsg', 'Gagal: ' + e.message, 1); }
+        finally { btn.disabled = false; renderPlan(); }
+      };
+      $('btnShare').onclick = async () => { try { await navigator.share({ files: [new File([S.lastBlob], fileName(), { type: S.lastBlob.type })], title: 'Profil Kegiatan' }); } catch (e) { } };
+      /* ---------- simpan ke OneDrive (flow SimpanProfil) ---------- */
+      $('selPic').innerHTML = (CFG.pembuatList || []).map(n => `<option>${esc(n)}</option>`).join('');
+      function refreshSaveState() {
+        const why = !CFG.saveFlowUrl ? 'Flow SimpanProfil belum dikonfigurasi (isi saveFlowUrl di profil-config.js).' : (!S.master ? 'Muat data dari DMS dulu (perlu daftar kegiatan terdaftar).' : '');
+        $('btnSave').disabled = !!why || !S.data; $('saveHint').textContent = why || Kit.flowUrlHint(CFG.saveFlowUrl);
+      }
+      setInterval(refreshSaveState, 800);
+      $('btnSave').onclick = async () => {
+        const btn = $('btnSave'); btn.disabled = true; msg('saveMsg', 'Menyusun PPTX…', 0); await new Promise(r => setTimeout(r, 30));
+        try {
+          readForm(); const { plan } = B.buildSlidePlan(S.data, { manifest: S.manifest });
+          const images = {}; B.imageKeys(plan).forEach(k => { if (!S.images[k]) throw new Error('Gambar hilang: ' + k); images[k] = S.images[k]; });
+          const r = E.render({ templateBytes: S.template, manifest: S.manifest, plan, images });
+          const withMaster = $('chkMaster').checked, pd = S.data.profilDasar;
+          const payload = PS.buildPayload({
+            data: S.data, pptxBytes: r.bytes, jumlahSlide: plan.length, kegiatanList: (S.master.kegiatanByProv[S.data.kegiatan.provinsi] || []), pic: $('selPic').value, maxPayloadMB: CFG.maxPayloadMB,
+            master: withMaster ? PM.toMaster(pd) : undefined, aset: withMaster ? PM.assetsForSave(pd.aset, S.images, k => !k.startsWith('aset:')) : []
+          });
+          if (!confirm(`Simpan ke OneDrive?\n\n${payload.targetFolderPath}\n${payload.fileName}\n${plan.length} slide, ${payload.payloadMB} MB` + (withMaster ? '\n+ profil dasar sebagai default; gambar statis dikirim: ' + ((payload.aset || []).map(a => a.nama).join(', ') || 'tidak ada yang baru') : '\n(profil dasar & gambar statis TIDAK dikirim — kotak default tidak dicentang)'))) { msg('saveMsg', 'Dibatalkan.', 0); return; }
+          msg('saveMsg', 'Mengunggah ke OneDrive… (bisa beberapa menit untuk file besar)', 0);
+          const res = await PS.submit(CFG.saveFlowUrl, payload, { timeoutMs: CFG.timeoutMs });
+          LV.clearCache();
+          if (withMaster) { S.masterFound = true; PM.ASET.forEach(n => { const k = pd.aset[n]; if (k && !k.startsWith('aset:')) { const nk = 'aset:' + n + ':' + (++S.uid); S.images[nk] = S.images[k]; pd.aset[n] = nk; } }); $('chkMaster').checked = false; info('Profil dasar tersimpan sebagai default kegiatan ini.'); renderAll(); }
+          const el = $('saveMsg'); el.className = 'okbox'; el.innerHTML = '✓ Tersimpan. <a href="' + esc(res.link) + '" target="_blank" rel="noopener">Buka PPTX</a> · <a href="#" id="waCopy">Salin teks WA</a>';
+          $('waCopy').onclick = async ev => { ev.preventDefault(); try { await navigator.clipboard.writeText(`Berikut link Profil Kegiatan *${payload.judul}* : ${res.link}`); ev.target.textContent = 'Tersalin ✓'; } catch (e) { ev.target.textContent = 'Gagal menyalin'; } };
+        } catch (e) { console.error(e); msg('saveMsg', 'Gagal: ' + e.message, 1); }
+        finally { btn.disabled = false; refreshSaveState(); }
+      };
+      function msg(id, t, bad) { const el = $(id); el.className = t ? (bad ? 'err' : (id === 'pasteMsg' ? 'mut' : 'okbox')) : ''; el.textContent = t || ''; }
+
+      chips();
+    })();
+  </script>
+</body>
+
+</html>

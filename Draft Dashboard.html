@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Dashboard Monitoring Pengawasan Fisik — Subdit Wilayah 2</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --primary: #152e4d;
+      --primary-dark: #0c1c30;
+      --primary-light: #204572;
+      --gold: #f59e0b;
+      --gold-light: #fef3c7;
+      --gold-dark: #b45309;
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --line: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --ok: #10b981;
+      --ok-bg: #ecfdf5;
+      --ok-border: #a7f3d0;
+      --bad: #ef4444;
+      --bad-bg: #fef2f2;
+      --bad-border: #fecaca;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 15px 35px rgba(15, 39, 68, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 50px;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Watermark Background Siluet Baling-Baling PU */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('logo-pu.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 55vh auto;
+      opacity: 0.035;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .page-wrapper {
+      padding: 24px 16px 0;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    /* HEADER SESUAI STANDAR test - rekap.html */
+    .header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      padding: 20px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-container {
+      width: 54px !important;
+      height: 54px !important;
+      background: white !important;
+      border-radius: var(--radius-sm) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 5px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .logo-container img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+    }
+
+    .header-content h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 3px;
+    }
+
+    .header-content p {
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .badge-cutoff {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold-light);
+      border: 1px solid var(--gold);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dashboard-content {
+      padding: 24px 28px;
+    }
+
+    /* KPI SUMMARY CARDS */
+    .kpi-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* FILTER BAR */
+    .filter-section {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: #f8fafc;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .filter-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-family: inherit;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21, 46, 77, 0.12);
+    }
+
+    /* PROJECT ROW LIST */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .project-row {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--line);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 370px 1fr;
+      overflow: hidden;
+    }
+
+    @media (max-width: 1100px) {
+      .project-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* SISI KIRI: PROFIL PAKET */
+    .row-profile {
+      padding: 22px;
+      border-right: 1.5px solid var(--line);
+      background: #fbfcfe;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .tag-kritis {
+      background: var(--bad-bg);
+      color: #991b1b;
+      border: 1px solid var(--bad-border);
+    }
+
+    .tag-ontrack {
+      background: var(--ok-bg);
+      color: #065f46;
+      border: 1px solid var(--ok-border);
+    }
+
+    .tag-unreported {
+      background: var(--warn-bg);
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .meta span {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .stat-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      background: #ffffff;
+      border: 1.5px solid var(--line);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: 800;
+      margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .issue-box {
+      font-size: 11.5px;
+      background: #fff8f8;
+      border-left: 3px solid var(--bad);
+      padding: 8px 12px;
+      color: #881337;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+
+    .btn-ppt {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .btn-ppt:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    /* SISI KANAN: KURVA S & MATRIKS TABEL TERSINKRONISASI */
+    .row-analytics {
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .analytics-scroll-box {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar Halus */
+    .analytics-scroll-box::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .analytics-scroll-box::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    .analytics-scroll-box::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .analytics-scroll-box::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container-sync {
+      height: 175px;
+      position: relative;
+      background: #ffffff;
+    }
+
+    /* TABEL PROGRES OPTIMAL */
+    .matrix-table-sync {
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-align: center;
+      table-layout: fixed;
+      background: white;
+      border-top: 1.5px solid var(--line);
+    }
+
+    .matrix-table-sync th,
+    .matrix-table-sync td {
+      padding: 5px 2px;
+      border: 1px solid var(--line);
+      height: 25px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+    }
+
+    /* Header Kolom Kiri (Label Rencana, Realisasi, Deviasi) */
+    .matrix-table-sync th.row-label {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-align: left;
+      padding-left: 10px;
+      font-size: 10.5px;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+    }
+
+    .matrix-table-sync thead th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 10.5px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .matrix-table-sync thead th.row-label {
+      background: var(--primary-dark);
+      color: var(--gold);
+    }
+
+    .row-rnc td {
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .row-rls td {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .row-dev td {
+      font-weight: 700;
+    }
+
+    .dev-neg {
+      color: var(--bad);
+      background: var(--bad-bg) !important;
+    }
+
+    .dev-pos {
+      color: #15803d;
+      background: var(--ok-bg) !important;
+    }
+
+    .cell-empty {
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+
+    /* MODAL POPUP SLIDESHOW SESUAI test - rekap.html */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(12, 28, 48, 0.8);
+      backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box-large {
+      background: white;
+      width: 100%;
+      max-width: 1240px;
+      height: 88vh;
+      border-radius: var(--radius);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border: 1.5px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 14px 22px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .modal-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--bad);
+    }
+
+    .iframe-container {
+      flex: 1;
+      background: #0f172a;
+    }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .page-wrapper {
+        padding: 0;
+      }
+      .container {
+        border-radius: 0;
+        border: none;
+      }
+      .dashboard-content {
+        padding: 14px 12px;
+      }
+      .header {
+        padding: 16px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-wrapper">
+    <div class="container">
+      
+      <!-- HEADER RESMI STANDAR PU -->
+      <div class="header">
+        <div class="header-left">
+          <div class="logo-container">
+            <img src="logo-pu.png" alt="Logo PU" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Logo_Kementerian_Pekerjaan_Umum_dan_Perumahan_Rakyat.png/120px-Logo_Kementerian_Pekerjaan_Umum_dan_Perumahan_Rakyat.png';">
+          </div>
+          <div class="header-content">
+            <h1>Dashboard Monitoring Pengawasan Fisik</h1>
+            <p>Direktorat Bina Penataan Bangunan · Ditjen Cipta Karya · Kementerian PU</p>
+          </div>
+        </div>
+        <div class="badge-cutoff">
+          📅 Cut-Off: <strong>23 September 2026 (Periode 16)</strong>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+
+        <!-- KPI SUMMARY BAR -->
+        <div class="kpi-container">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Paket Terpantau</div>
+            <div class="kpi-val" id="kpiTotalPaket">3 Paket</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Total Nilai Kontrak</div>
+            <div class="kpi-val">Rp 84,51 M</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Kontrak Kritis (Dev &lt; -8%)</div>
+            <div class="kpi-val" style="color: var(--bad);" id="kpiKritis">1 Paket</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Belum Update Data</div>
+            <div class="kpi-val" style="color: var(--warn);" id="kpiUnreported">1 Paket</div>
+          </div>
+        </div>
+
+        <!-- FILTER BAR -->
+        <div class="filter-section">
+          <div class="filter-group">
+            <label>🔍 Cari Paket</label>
+            <input type="text" id="filterSearch" placeholder="Ketik nama paket / lokasi / kontraktor..." oninput="filterDashboard()">
+          </div>
+          <div class="filter-group" style="max-width: 250px;">
+            <label>🚦 Status</label>
+            <select id="filterStatus" onchange="filterDashboard()">
+              <option value="">-- Semua Status --</option>
+              <option value="kritis">⚠️ Kontrak Kritis</option>
+              <option value="ontrack">✅ On-Track</option>
+              <option value="unreported">⚪ Belum Update Data</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- CONTAINER DAFTAR PROYEK (ROW SYSTEM) -->
+        <div class="project-list" id="projectListContainer">
+          <!-- Render dinamis via JavaScript -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SLIDESHOW PPTX -->
+  <div id="slideshowModal" class="modal-overlay">
+    <div class="modal-box-large">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span style="font-size:20px;">🖥️</span>
+          <span id="modalTitle">Slideshow Profil PPTX</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()" title="Tutup Slideshow">✕</button>
+      </div>
+      <div class="iframe-container">
+        <iframe id="pptxFrame" src="" allowfullscreen="true"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DATA MASTER REAL-TIME
+    const masterData = [
+      {
+        id: 1,
+        nama_paket: "Pembangunan Kantor Bupati Pohuwato",
+        lokasi: "Kab. Pohuwato, Prov. Gorontalo",
+        kontrak: "Rp 37,26 M | PT. Cipta Adhi Guna",
+        supervisi: "PT. Manggala Karya Bangun Sarana",
+        keu_rencana: 28.80,
+        keu_realisasi: 20.00,
+        kendala: "Tenaga kerja rendah, produktivitas minim & pengadaan material fabrikasi terlambat.",
+        pptx_url: "https://puprtes-my.sharepoint.com/:p:/r/personal/teuku_zaqirul_pu_go_id/_layouts/15/Doc.aspx?sourcedoc=%7B6fb08c3c-2278-4591-ab51-6b61b7eaf8d8%7D&action=embedview",
+        rencana: [0.04, 0.08, 0.67, 1.26, 2.27, 3.26, 4.72, 6.18, 7.93, 9.77, 11.60, 13.26, 15.50, 17.80, 20.96, 24.82, 28.90, 33.17, 37.50, 42.20, 48.00, 53.55, 59.15, 64.45, 70.07, 75.26, 80.79, 85.18, 91.24, 97.77, 100.00],
+        realisasi: [0.05, 0.75, 1.25, 1.67, 2.70, 4.40, 5.14, 5.76, 5.93, 6.83, 7.68, 7.82, 8.05, 9.39, 13.08, 15.00] // s/d Minggu 16
+      },
+      {
+        id: 2,
+        nama_paket: "Pembangunan Gedung RSUD Pratama",
+        lokasi: "Kab. Gorontalo",
+        kontrak: "Rp 28,50 M | PT. Bina Mandiri",
+        supervisi: "PT. Sarana Buana Konsultan",
+        keu_rencana: 35.00,
+        keu_realisasi: 38.50,
+        kendala: "Pekerjaan struktur lantai 2 berjalan normal sesuai master schedule.",
+        pptx_url: "",
+        rencana: [1.0, 3.0, 6.0, 10.0, 15.0, 22.0, 30.0, 40.5, 52.0, 65.0, 78.0, 88.0, 95.0, 100.0],
+        realisasi: [1.2, 3.5, 6.8, 11.0, 16.5, 23.0, 31.0, 42.0] // s/d Minggu 8
+      },
+      {
+        id: 3,
+        nama_paket: "Peningkatan Jalan Akses Pelabuhan",
+        lokasi: "Kab. Bone Bolango",
+        kontrak: "Rp 18,75 M | PT. Karya Utama",
+        supervisi: "PT. Tetra Mandiri",
+        keu_rencana: 30.00,
+        keu_realisasi: 18.00,
+        kendala: "Data realisasi minggu 6-8 belum diinput oleh konsultan pengawas.",
+        pptx_url: "",
+        rencana: [2.0, 5.0, 9.0, 15.0, 22.0, 28.0, 34.2, 42.0, 53.0, 66.0, 80.0, 92.0, 100.0],
+        realisasi: [2.0, 4.8, 8.5, 14.0, 20.0] // Terhenti di Minggu 5
+      }
+    ];
+
+    const currentCutoffWeek = 16;
+    const chartInstances = {};
+
+    // KONSTANTA GEOMETRI UNTUK SINKRONISASI 100% PERSISI ANTARA KURVA S & TABEL
+    const W_HEADER = 120; // Lebar kolom header label di kiri (px)
+    const W_COL = 40;     // Lebar presisi per kolom minggu (px)
+
+    function renderDashboard(dataToRender = masterData) {
+      const container = document.getElementById('projectListContainer');
+      container.innerHTML = '';
+
+      if (dataToRender.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-muted); background: white; border-radius: var(--radius); border: 1.5px solid var(--line);">Paket tidak ditemukan.</div>`;
+        return;
+      }
+
+      dataToRender.forEach((p, idx) => {
+        const totalWeeks = p.rencana.length;
+        const lastReportedWeek = p.realisasi.length;
+        const isReportMissing = lastReportedWeek < Math.min(currentCutoffWeek, totalWeeks);
+        const lastRnc = p.rencana[lastReportedWeek - 1] || 0;
+        const lastRls = p.realisasi[lastReportedWeek - 1] || 0;
+        const lastDev = (lastRls - lastRnc).toFixed(2);
+
+        // Status Badge
+        let statusTag = '';
+        let statusType = '';
+        if (isReportMissing) {
+          statusType = 'unreported';
+          statusTag = `<span class="status-tag tag-unreported">⚪ Belum Update Data (M${lastReportedWeek + 1}+ Kosong)</span>`;
+        } else if (parseFloat(lastDev) < -8.0) {
+          statusType = 'kritis';
+          statusTag = `<span class="status-tag tag-kritis">⚠️ Kontrak Kritis (Dev ${lastDev}%)</span>`;
+        } else {
+          statusType = 'ontrack';
+          statusTag = `<span class="status-tag tag-ontrack">✅ On-Track (+${lastDev}%)</span>`;
+        }
+
+        // Kalkulasi Lebar Total Sinkron
+        const totalScrollWidth = W_HEADER + (totalWeeks * W_COL);
+
+        // Header Minggu (1, 2, 3, ...)
+        let thWeeks = '';
+        let tdRnc = '';
+        let tdRls = '';
+        let tdDev = '';
+
+        for (let w = 0; w < totalWeeks; w++) {
+          thWeeks += `<th style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;">${w + 1}</th>`;
+          
+          const rncVal = p.rencana[w];
+          tdRnc += `<td style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;">${rncVal.toFixed(1)}</td>`;
+
+          if (w < lastReportedWeek) {
+            const rlsVal = p.realisasi[w];
+            const devVal = (rlsVal - rncVal).toFixed(1);
+            tdRls += `<td style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;">${rlsVal.toFixed(1)}</td>`;
+            tdDev += `<td style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;" class="${parseFloat(devVal) < 0 ? 'dev-neg' : 'dev-pos'}">${parseFloat(devVal) > 0 ? '+' : ''}${devVal}</td>`;
+          } else {
+            tdRls += `<td style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;" class="cell-empty">-</td>`;
+            tdDev += `<td style="width:${W_COL}px; min-width:${W_COL}px; max-width:${W_COL}px;" class="cell-empty">-</td>`;
+          }
+        }
+
+        const rowHtml = `
+          <div class="project-row" data-status="${statusType}">
+            <!-- Profil Sisi Kiri -->
+            <div class="row-profile">
+              <div>
+                ${statusTag}
+                <div class="title">${p.nama_paket}</div>
+                <div class="meta">
+                  📍 <span>${p.lokasi}</span><br>
+                  💼 <span>${p.kontrak}</span><br>
+                  🕵️ <span>${p.supervisi}</span>
+                </div>
+
+                <div class="stat-matrix">
+                  <div class="stat-box">
+                    <div class="stat-label">FISIK CUT-OFF (M${lastReportedWeek})</div>
+                    <div class="stat-value" style="color: ${parseFloat(lastDev) < 0 ? 'var(--bad)' : 'var(--ok)'}">
+                      ${lastRls.toFixed(2)}% <span style="font-size:11px; font-weight:700;">(${parseFloat(lastDev) > 0 ? '+' : ''}${lastDev}%)</span>
+                    </div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-label">KEUANGAN</div>
+                    <div class="stat-value" style="color: var(--primary);">${p.keu_realisasi.toFixed(2)}%</div>
+                  </div>
+                </div>
+
+                <div class="issue-box">
+                  <strong>Catatan Kendala:</strong> ${p.kendala}
+                </div>
+              </div>
+
+              ${p.pptx_url ? `
+                <button class="btn-ppt" onclick="openModal('${p.nama_paket.replace(/'/g, "\\'")}', '${p.pptx_url}')">
+                  🖥️ Buka Slideshow PPTX ➔
+                </button>
+              ` : `
+                <button class="btn-ppt" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed; box-shadow:none;" disabled>
+                  Slide PPTX Belum Tersedia
+                </button>
+              `}
+            </div>
+
+            <!-- Analisis Kurva S & Matriks Tabel Tersinkron Sumbu X -->
+            <div class="row-analytics">
+              <div class="analytics-scroll-box" id="scroll_box_${p.id}">
+                <!-- Area Canvas Kurva S -->
+                <div class="chart-container-sync" style="width: ${totalScrollWidth}px;">
+                  <canvas id="chart_canvas_${p.id}" width="${totalScrollWidth}" height="175"></canvas>
+                </div>
+
+                <!-- Matriks Angka Mingguan -->
+                <table class="matrix-table-sync" style="width: ${totalScrollWidth}px;">
+                  <thead>
+                    <tr>
+                      <th class="row-label" style="width:${W_HEADER}px; min-width:${W_HEADER}px; max-width:${W_HEADER}px;">Minggu ke-</th>
+                      ${thWeeks}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="row-rnc">
+                      <th class="row-label" style="width:${W_HEADER}px; min-width:${W_HEADER}px; max-width:${W_HEADER}px;">Rencana Kum. (%)</th>
+                      ${tdRnc}
+                    </tr>
+                    <tr class="row-rls">
+                      <th class="row-label" style="width:${W_HEADER}px; min-width:${W_HEADER}px; max-width:${W_HEADER}px;">Realisasi Kum. (%)</th>
+                      ${tdRls}
+                    </tr>
+                    <tr class="row-dev">
+                      <th class="row-label" style="width:${W_HEADER}px; min-width:${W_HEADER}px; max-width:${W_HEADER}px;">Deviasi (%)</th>
+                      ${tdDev}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.innerHTML += rowHtml;
+      });
+
+      // Render Kurva S setelah elemen dimasukkan ke DOM
+      dataToRender.forEach(p => {
+        initSynchronizedChart(p);
+      });
+    }
+
+    // GENERATOR CHART.JS DENGAN PADDING LAYOUT PRESISI SEJAJAR DENGAN KOLOM TABEL
+    function initSynchronizedChart(p) {
+      const canvas = document.getElementById(`chart_canvas_${p.id}`);
+      if (!canvas) return;
+
+      if (chartInstances[p.id]) {
+        chartInstances[p.id].destroy();
+      }
+
+      const totalWeeks = p.rencana.length;
+      const labels = Array.from({ length: totalWeeks }, (_, i) => `${i + 1}`);
+      const lastIdx = p.realisasi.length - 1;
+
+      // Layout Padding khusus: Left = Lebar Label + 1/2 Lebar Kolom; Right = 1/2 Lebar Kolom
+      const leftPadding = W_HEADER + (W_COL / 2);
+      const rightPadding = W_COL / 2;
+
+      // Custom Plugin Pop-up Bubble Realisasi Terakhir
+      const popupPlugin = {
+        id: `popup_${p.id}`,
+        afterDraw(chart) {
+          if (lastIdx < 0) return;
+          const { ctx, scales: { x, y } } = chart;
+          const px = x.getPixelForValue(lastIdx);
+          const py = y.getPixelForValue(p.realisasi[lastIdx]);
+
+          // Titik Lingkaran Titik Terakhir
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(px, py, 4.5, 0, 2 * Math.PI);
+          ctx.fillStyle = '#ef4444';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Bubble Badge Status
+          const rnc = p.rencana[lastIdx];
+          const rls = p.realisasi[lastIdx];
+          const dev = (rls - rnc).toFixed(1);
+
+          const text = `M${lastIdx + 1}: ${dev > 0 ? '+' : ''}${dev}%`;
+          ctx.font = 'bold 9.5px "JetBrains Mono", monospace';
+          const textWidth = ctx.measureText(text).width;
+
+          const boxX = px - (textWidth / 2) - 6;
+          const boxY = Math.max(py - 24, 6);
+
+          ctx.fillStyle = parseFloat(dev) < 0 ? '#fef2f2' : '#ecfdf5';
+          ctx.strokeStyle = parseFloat(dev) < 0 ? '#ef4444' : '#10b981';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(boxX, boxY, textWidth + 12, 17, 4);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = parseFloat(dev) < 0 ? '#991b1b' : '#065f46';
+          ctx.fillText(text, boxX + 6, boxY + 11.5);
+          ctx.restore();
+        }
+      };
+
+      chartInstances[p.id] = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Rencana Kumulatif',
+              data: p.rencana,
+              borderColor: '#152e4d',
+              borderWidth: 2,
+              pointRadius: 0,
+              tension: 0.2
+            },
+            {
+              label: 'Realisasi Kumulatif',
+              data: [...p.realisasi, ...Array(totalWeeks - p.realisasi.length).fill(null)],
+              borderColor: '#ef4444',
+              borderWidth: 2.2,
+              pointRadius: 1.5,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: false,
+          maintainAspectRatio: false,
+          animation: false,
+          layout: {
+            padding: {
+              left: leftPadding,
+              right: rightPadding,
+              top: 8,
+              bottom: 4
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'end',
+              labels: {
+                boxWidth: 12,
+                boxHeight: 2,
+                font: { size: 10, family: "'Plus Jakarta Sans', sans-serif", weight: '600' },
+                color: '#1e293b'
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 11 },
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 10 }
+            }
+          },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 25,
+                font: { size: 9, family: "'JetBrains Mono', monospace" },
+                color: '#64748b',
+                callback: (v) => v + '%'
+              },
+              grid: {
+                color: '#e2e8f0',
+                borderDash: [3, 3]
+              }
+            },
+            x: {
+              ticks: {
+                display: false // Angka sumbu x ditampilkan oleh baris header tabel di bawahnya secara presisi
+              },
+              grid: {
+                color: '#f1f5f9',
+                drawTicks: true
+              }
+            }
+          }
+        },
+        plugins: [popupPlugin]
+      });
+    }
+
+    // FILTER HANDLER
+    function filterDashboard() {
+      const search = document.getElementById('filterSearch').value.toLowerCase();
+      const status = document.getElementById('filterStatus').value;
+
+      const filtered = masterData.filter(p => {
+        const lastReportedWeek = p.realisasi.length;
+        const totalWeeks = p.rencana.length;
+        const isReportMissing = lastReportedWeek < Math.min(currentCutoffWeek, totalWeeks);
+        const lastRnc = p.rencana[lastReportedWeek - 1] || 0;
+        const lastRls = p.realisasi[lastReportedWeek - 1] || 0;
+        const lastDev = (lastRls - lastRnc).toFixed(2);
+
+        let pStatus = 'ontrack';
+        if (isReportMissing) pStatus = 'unreported';
+        else if (parseFloat(lastDev) < -8.0) pStatus = 'kritis';
+
+        const matchSearch = p.nama_paket.toLowerCase().includes(search) ||
+                            p.lokasi.toLowerCase().includes(search) ||
+                            p.kontrak.toLowerCase().includes(search);
+        const matchStatus = !status || pStatus === status;
+
+        return matchSearch && matchStatus;
+      });
+
+      renderDashboard(filtered);
+    }
+
+    // MODAL CONTROL
+    function openModal(title, url) {
+      document.getElementById('modalTitle').innerText = `Slideshow: ${title}`;
+      document.getElementById('pptxFrame').src = url;
+      document.getElementById('slideshowModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('pptxFrame').src = '';
+      document.getElementById('slideshowModal').classList.remove('active');
+    }
+
+    // Tutup modal jika klik di luar area box
+    document.getElementById('slideshowModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Inisialisasi awal
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDashboard();
+    });
+  </script>
+</body>
+
+</html>
