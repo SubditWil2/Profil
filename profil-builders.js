@@ -34,8 +34,21 @@
     function valuesOf(data) {
         const pd = data.profilDasar || {}, pr = data.progres || {}, keg = data.kegiatan || {};
         const fis = pr.fisik || {}, keu = pr.keuangan || {};
+        const ks = data.kurvaS || {};
+
+        // 1. Hitung minggu jadwal dan minggu cutoff aktif
+        const { totalWeeks } = Kit.calcScheduleWeeks(pd.tglMulai, pd.tglSelesai);
+        const cutoffWeek = Kit.calcCutoffWeek(pd.tglMulai, pr.tanggalStatus, totalWeeks);
+
+        // 2. Ambil nilai Fisik Rencana & Realisasi dari Matriks Kurva S (jika ada)
+        const rncList = ks.rencana || [];
+        const rlsList = ks.realisasi || [];
+        const fisRnc = (rncList[cutoffWeek - 1] !== undefined) ? rncList[cutoffWeek - 1] : fis.rencana;
+        const fisRls = (rlsList[cutoffWeek - 1] !== undefined) ? rlsList[cutoffWeek - 1] : fis.realisasi;
+
         const dev = (r, a) => (a === undefined || r === undefined || a === null || r === null) ? '' : Kit.fmtAngka(Number(a) - Number(r), 2);
         const hari = (pd.tglMulai && pd.tglSelesai) ? Kit.hariInklusif(pd.tglMulai, pd.tglSelesai) : null;
+
         const values = {
             judul_kegiatan: String(pd.judul || '').toUpperCase(), lokasi: pd.lokasiSingkat || '',
             kode_kontrak: pd.kodeKontrak || '', label_program: [pd.kodeKontrak, pd.tahun].filter(Boolean).join(' '),
@@ -44,9 +57,24 @@
             masa_pelaksanaan: hari ? `${hari} Hari Kalender (${Kit.fmtTanggal(pd.tglMulai, { pad: false })} – ${Kit.fmtTanggal(pd.tglSelesai)})` : '',
             luas_persil: pd.luasPersil ? `${Kit.fmtAngka(pd.luasPersil)} m2` : '', luas_bangunan: pd.luasBangunan ? `${Kit.fmtAngka(pd.luasBangunan)} m2` : '',
             cap_pra: pd.aset && pd.aset.pra ? (pd.capPra || '') : '', cap_pasca: pd.aset && pd.aset.pasca ? (pd.capPasca || '') : '',
-            fisik_rencana: Kit.fmtAngka(fis.rencana, 2), fisik_realisasi: Kit.fmtAngka(fis.realisasi, 2), fisik_deviasi: dev(fis.rencana, fis.realisasi),
-            keu_rencana: Kit.fmtAngka(keu.rencana, 2), keu_realisasi: Kit.fmtAngka(keu.realisasi, 2), keu_deviasi: dev(keu.rencana, keu.realisasi)
+            // Angka Fisik otomatis terhubung dengan Matriks Kurva S:
+            fisik_rencana: Kit.fmtAngka(fisRnc, 2), 
+            fisik_realisasi: Kit.fmtAngka(fisRls, 2), 
+            fisik_deviasi: dev(fisRnc, fisRls),
+            keu_rencana: Kit.fmtAngka(keu.rencana, 2), 
+            keu_realisasi: Kit.fmtAngka(keu.realisasi, 2), 
+            keu_deviasi: dev(keu.rencana, keu.realisasi)
         };
+        const lists = {
+            latar_belakang: pd.latarBelakang || [], maksud_tujuan: pd.maksudTujuan || [], lingkup: pd.lingkup || [],
+            masalah: pr.masalah || [], tindak_lanjut: pr.tindakLanjut || []
+        };
+        const groups = {
+            pihak: (pd.pihak || []).map(p => ({ peran: p.peran || '', nama: p.nama || '', nilai: Kit.fmtRupiah(p.nilai) })),
+            kron: kronologisRows(data.kronologisRaw, keg.provinsi, keg.namaKegiatan, data.kronologisExclude)
+        };
+        return Kit.sanitizeControlChars({ values, lists, groups });
+    }
         const lists = {
             latar_belakang: pd.latarBelakang || [], maksud_tujuan: pd.maksudTujuan || [], lingkup: pd.lingkup || [],
             masalah: pr.masalah || [], tindak_lanjut: pr.tindakLanjut || []
