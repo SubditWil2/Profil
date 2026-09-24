@@ -19,19 +19,25 @@
             tglMulai: pd.tglMulai || '', tglSelesai: pd.tglSelesai || '', luasPersil: pd.luasPersil == null ? '' : pd.luasPersil, luasBangunan: pd.luasBangunan == null ? '' : pd.luasBangunan,
             pihakJson: JSON.stringify((pd.pihak || []).map(p => ({ peran: p.peran || '', nama: p.nama || '', nilai: p.nilai == null ? null : p.nilai }))),
             lingkup: (pd.lingkup || []).join('\n'), latarBelakang: (pd.latarBelakang || []).join('\n\n'), maksudTujuan: (pd.maksudTujuan || []).join('\n\n'),
-            capPra: pd.capPra || '', capPasca: pd.capPasca || ''
+            capPra: pd.capPra || '', capPasca: pd.capPasca || '', kurvaRencanaJson: JSON.stringify(pd.kurvaRencana || []),
+addendumKe: pd.addendumKe || 0,
+nomorAddendum: pd.nomorAddendum || ''
         };
     }
     /** Baris Excel `ProfilKegiatan` (nama kolom bervariasi) -> profilDasar. */
     function fromRow(row) {
         const g = (...n) => { const v = Kit.getv(row, n); return v === null || v === undefined ? '' : v; };
         let pihak = []; try { pihak = JSON.parse(g('Pihak', 'Pihak (JSON)', 'pihakJson', 'PihakJson') || '[]'); } catch (e) { }
+        let kurvaRencana = [];
+try { kurvaRencana = JSON.parse(g('Kurva Rencana', 'Kurva Rencana (JSON)', 'kurvaRencanaJson', 'kurvaRencana') || '[]'); } catch (e) { }
         return {
             judul: String(g('Judul Profil', 'judul')), kodeKontrak: String(g('Kode Kontrak', 'kodeKontrak')), tahun: numOrNull(g('Tahun', 'tahun')), lokasiSingkat: String(g('Lokasi Singkat', 'lokasiSingkat')), lokasiPekerjaan: String(g('Lokasi Pekerjaan', 'lokasiPekerjaan')),
             tglMulai: String(g('Tgl Mulai', 'tglMulai')), tglSelesai: String(g('Tgl Selesai', 'tglSelesai')), luasPersil: numOrNull(g('Luas Persil', 'luasPersil')), luasBangunan: numOrNull(g('Luas Bangunan', 'luasBangunan')),
             pihak: pihak.map(p => ({ peran: p.peran || '', nama: p.nama || '', nilai: numOrNull(p.nilai) })),
             lingkup: lines(g('Lingkup', 'lingkup')), latarBelakang: paras(g('Latar Belakang', 'latarBelakang')), maksudTujuan: paras(g('Maksud Tujuan', 'Maksud dan Tujuan', 'maksudTujuan')),
-            capPra: String(g('Cap Pra', 'capPra')), capPasca: String(g('Cap Pasca', 'capPasca')), aset: {}
+            capPra: String(g('Cap Pra', 'capPra')), capPasca: String(g('Cap Pasca', 'capPasca')), kurvaRencana: Array.isArray(kurvaRencana) ? kurvaRencana : [],
+    addendumKe: numOrNull(g('Addendum Ke', 'addendumKe')) || 0,
+    nomorAddendum: String(g('Nomor Addendum', 'nomorAddendum') || ''), aset: {}
         };
     }
     const b64ToBytes = b => { if (typeof Buffer !== 'undefined') return new Uint8Array(Buffer.from(b, 'base64')); const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; };
@@ -52,9 +58,20 @@
                 const snap = typeof snapRaw === 'string' ? JSON.parse(snapRaw || '{}') : (snapRaw || {});
                 fotoSnap = Array.isArray(snap.foto) ? snap.foto.map(f => ({ kelompok: f.kelompok || '', keterangan: f.keterangan || '', sorotan: !!f.sorotan })) : [];
             } catch (e) { fotoSnap = []; }
+            let kurvaRealisasi = [];
+try {
+    const snapRaw = g('Snapshot', 'snapshotJson', 'SnapshotJson');
+    const snap = typeof snapRaw === 'string' ? JSON.parse(snapRaw || '{}') : (snapRaw || {});
+    if (snap.kurvaS && Array.isArray(snap.kurvaS.realisasi)) {
+        kurvaRealisasi = snap.kurvaS.realisasi;
+    }
+} catch (e) { }
             return {
                 tanggal: String(g('Tanggal Status', 'tanggalStatus')).replace(/-/g, '.'), fisikRencana: pctNum(g('Fisik Rencana', 'fisikRencana')), fisikRealisasi: pctNum(g('Fisik Realisasi', 'fisikRealisasi')),
-                keuRencana: pctNum(g('Keu Rencana', 'keuRencana')), keuRealisasi: pctNum(g('Keu Realisasi', 'keuRealisasi')), masalah: lines(g('Masalah', 'masalah')), tindakLanjut: lines(g('Tindak Lanjut', 'tindakLanjut')), link: String(g('Link PPTX', 'linkPptx')), foto: fotoSnap
+                keuRencana: pctNum(g('Keu Rencana', 'keuRencana')), keuRealisasi: pctNum(g('Keu Realisasi', 'keuRealisasi')), masalah: lines(g('Masalah', 'masalah')), tindakLanjut: lines(g('Tindak Lanjut', 'tindakLanjut')), link: String(g('Link PPTX', 'linkPptx')), kurvaRealisasi: kurvaRealisasi,
+    mingguCutoff: numOrNull(g('Minggu Cutoff', 'mingguCutoff')),
+    link: String(g('Link PPTX', 'linkPptx')),
+    foto: fotoSnap
             };
         }).sort((a, b) => b.tanggal.localeCompare(a.tanggal));
         return { found: true, master: d.master, profilDasar: fromRow(d.master), assets, laporan, diubahOleh: String(Kit.getv(d.master, ['Diubah Oleh', 'diubahOleh']) || ''), diubahPada: String(Kit.getv(d.master, ['Diubah Pada', 'diubahPada']) || '') };
