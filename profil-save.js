@@ -25,13 +25,14 @@
 
     /** Salinan data tanpa gambar/baris mentah: cukup untuk mengisi ulang teks laporan berikutnya. */
     function snapshot(data) {
-        const d = JSON.parse(JSON.stringify(data || {}));
-        delete d.kronologisRaw;
-        if (d.profilDasar) delete d.profilDasar.aset;
-        if (d.progres) delete d.progres.kurvaS;
-        d.foto = (d.foto || []).map(f => ({ kelompok: f.kelompok || '', keterangan: f.keterangan || '', sorotan: !!f.sorotan }));
-        return d;
-    }
+    const d = JSON.parse(JSON.stringify(data || {}));
+    delete d.kronologisRaw;
+    if (d.profilDasar) delete d.profilDasar.aset;
+    delete d.progres.kurvaS; // Hapus referensi string statis lama
+    // kurvaS (rencana, realisasi, mingguCutoff, addendum) tetap dipertahankan
+    d.foto = (d.foto || []).map(f => ({ kelompok: f.kelompok || '', keterangan: f.keterangan || '', sorotan: !!f.sorotan }));
+    return d;
+}
 
     /** opts: {data, pptxBytes, jumlahSlide, kegiatanList (untuk nama folder), pic, maxPayloadMB} */
     function buildPayload(opts) {
@@ -56,6 +57,9 @@
             keuRencana: num((pr.keuangan || {}).rencana), keuRealisasi: num((pr.keuangan || {}).realisasi),
             masalah: (pr.masalah || []).join('\n'), tindakLanjut: (pr.tindakLanjut || []).join('\n'),
             jumlahFoto: (d.foto || []).length, jumlahSlide: opts.jumlahSlide || 0,
+            kurvaRencanaJson: JSON.stringify(ks.rencana || (d.profilDasar && d.profilDasar.kurvaRencana) || []),
+    kurvaRealisasiJson: JSON.stringify(ks.realisasi || []),
+    mingguCutoff: ks.mingguCutoff || 0,
             snapshotJson: JSON.stringify(snapshot(d)),
             pic: opts.pic, timestamp: new Date().toISOString(), payloadMB: +mb.toFixed(2),
             simpanMaster: !!opts.master, master: opts.master || undefined, aset: opts.master ? (opts.aset || []) : undefined
